@@ -6,6 +6,10 @@
 	"publishConfig": {
 		"access": "public"
 	},
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/ronin-co/codegen"
+	},
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"files": [
