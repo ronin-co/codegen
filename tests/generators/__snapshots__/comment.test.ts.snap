@@ -1,0 +1,36 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`commnent ExtendedAdder 1`] = `
+{
+  "plural": " Add multiple records of the account model ",
+  "singular": " Add a single record of the account model ",
+}
+`;
+
+exports[`commnent ExtendedCounter 1`] = `
+{
+  "plural": " Count multiple records of the account model ",
+  "singular": " Count a single record of the account model ",
+}
+`;
+
+exports[`commnent ExtendedGetter 1`] = `
+{
+  "plural": " Get multiple records of the account model ",
+  "singular": " Get a single record of the account model ",
+}
+`;
+
+exports[`commnent ExtendedRemover 1`] = `
+{
+  "plural": " Remove multiple records of the account model ",
+  "singular": " Remove a single record of the account model ",
+}
+`;
+
+exports[`commnent ExtendedSetter 1`] = `
+{
+  "plural": " Set multiple records of the account model ",
+  "singular": " Set a single record of the account model ",
+}
+`;

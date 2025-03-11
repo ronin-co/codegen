@@ -1,0 +1,185 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate a basic model 1`] = `
+"import type { RONIN } from "ronin";
+import type * as Syntax from "@ronin/syntax/queries";
+interface AccountSchema extends Syntax.ResultRecord {
+    email: string;
+    name: string;
+}
+export type Account<TIncluding extends RONIN.Including<AccountSchema> = [
+]> = RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>;
+export type <TIncluding extends RONIN.Including<AccountSchema> = [
+]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+declare module "ronin" {
+    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
+    }
+    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
+    }
+    interface Adder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface Counter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface Getter extends RONIN.IGetterPlural<AccountSchema> {
+    }
+    interface Remover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface Setter extends RONIN.ISetter<AccountSchema> {
+    }
+    export namespace RONIN {
+        export interface ExtendedAdder {
+            /* Add a single record of the undefined model */
+            account: AccountAdder;
+        }
+        export interface ExtendedCounter {
+            /* Count a single record of the undefined model */
+            account: AccountCounter;
+            /* Count multiple records of the undefined model */
+            : Counter;
+        }
+        export interface ExtendedGetter {
+            /* Get a single record of the undefined model */
+            account: AccountGetter;
+            /* Get multiple records of the undefined model */
+            : Getter;
+        }
+        export interface ExtendedRemover {
+            /* Remove a single record of the undefined model */
+            account: AccountRemover;
+            /* Remove multiple records of the undefined model */
+            : Remover;
+        }
+        export interface ExtendedSetter {
+            /* Set a single record of the undefined model */
+            account: AccountSetter;
+            /* Set multiple records of the undefined model */
+            : Setter;
+        }
+    }
+}
+"
+`;
+
+exports[`generate with no models 1`] = `
+"import type { RONIN } from "ronin";
+import type * as Syntax from "@ronin/syntax/queries";
+declare module "ronin" {
+    export namespace RONIN {
+        export interface ExtendedAdder {
+        }
+        export interface ExtendedCounter {
+        }
+        export interface ExtendedGetter {
+        }
+        export interface ExtendedRemover {
+        }
+        export interface ExtendedSetter {
+        }
+    }
+}
+"
+`;
+
+exports[`generate with valid type-checking 1`] = `
+"import type { RONIN } from "ronin";
+import type * as Syntax from "@ronin/syntax/queries";
+interface AccountSchema extends Syntax.ResultRecord {
+    email: string;
+    name: string;
+}
+export type Account<TIncluding extends RONIN.Including<AccountSchema> = [
+]> = RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>;
+export type Accounts<TIncluding extends RONIN.Including<AccountSchema> = [
+]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+declare module "ronin" {
+    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
+    }
+    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
+    }
+    interface AccountsAdder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface AccountsCounter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface AccountsGetter extends RONIN.IGetterPlural<AccountSchema> {
+    }
+    interface AccountsRemover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface AccountsSetter extends RONIN.ISetter<AccountSchema> {
+    }
+    export namespace RONIN {
+        export interface ExtendedAdder {
+            /* Add a single record of the undefined model */
+            account: AccountAdder;
+        }
+        export interface ExtendedCounter {
+            /* Count a single record of the undefined model */
+            account: AccountCounter;
+            /* Count multiple records of the undefined model */
+            accounts: AccountsCounter;
+        }
+        export interface ExtendedGetter {
+            /* Get a single record of the undefined model */
+            account: AccountGetter;
+            /* Get multiple records of the undefined model */
+            accounts: AccountsGetter;
+        }
+        export interface ExtendedRemover {
+            /* Remove a single record of the undefined model */
+            account: AccountRemover;
+            /* Remove multiple records of the undefined model */
+            accounts: AccountsRemover;
+        }
+        export interface ExtendedSetter {
+            /* Set a single record of the undefined model */
+            account: AccountSetter;
+            /* Set multiple records of the undefined model */
+            accounts: AccountsSetter;
+        }
+    }
+}
+"
+`;
+
+exports[`generate with invalid type-checking 1`] = `
+"\x1B[96mindex.d.ts\x1B[0m:\x1B[93m9\x1B[0m:\x1B[93m1\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1128: \x1B[0mDeclaration or statement expected.
+
+\x1B[7m9\x1B[0m export type <TIncluding extends RONIN.Including<AccountSchema> = [
+\x1B[7m \x1B[0m \x1B[91m~~~~~~\x1B[0m
+\x1B[96mindex.d.ts\x1B[0m:\x1B[93m9\x1B[0m:\x1B[93m25\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1005: \x1B[0m';' expected.
+
+\x1B[7m9\x1B[0m export type <TIncluding extends RONIN.Including<AccountSchema> = [
+\x1B[7m \x1B[0m \x1B[91m                        ~~~~~~~\x1B[0m
+\x1B[96mindex.d.ts\x1B[0m:\x1B[93m10\x1B[0m:\x1B[93m4\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1109: \x1B[0mExpression expected.
+
+\x1B[7m10\x1B[0m ]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+\x1B[7m  \x1B[0m \x1B[91m   ~\x1B[0m
+\x1B[96mindex.d.ts\x1B[0m:\x1B[93m41\x1B[0m:\x1B[93m13\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1131: \x1B[0mProperty or signature expected.
+
+\x1B[7m41\x1B[0m             : Counter;
+\x1B[7m  \x1B[0m \x1B[91m            ~\x1B[0m
+\x1B[96mindex.d.ts\x1B[0m:\x1B[93m47\x1B[0m:\x1B[93m13\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1131: \x1B[0mProperty or signature expected.
+
+\x1B[7m47\x1B[0m             : Getter;
+\x1B[7m  \x1B[0m \x1B[91m            ~\x1B[0m
+\x1B[96mindex.d.ts\x1B[0m:\x1B[93m53\x1B[0m:\x1B[93m13\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1131: \x1B[0mProperty or signature expected.
+
+\x1B[7m53\x1B[0m             : Remover;
+\x1B[7m  \x1B[0m \x1B[91m            ~\x1B[0m
+\x1B[96mindex.d.ts\x1B[0m:\x1B[93m59\x1B[0m:\x1B[93m13\x1B[0m - \x1B[91merror\x1B[0m\x1B[90m TS1131: \x1B[0mProperty or signature expected.
+
+\x1B[7m59\x1B[0m             : Setter;
+\x1B[7m  \x1B[0m \x1B[91m            ~\x1B[0m
+"
+`;

@@ -1,0 +1,169 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`module a basic model 1`] = `
+"declare module "ronin" {
+    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
+    }
+    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
+    }
+    interface Adder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface Counter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface Getter extends RONIN.IGetterPlural<AccountSchema> {
+    }
+    interface Remover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface Setter extends RONIN.ISetter<AccountSchema> {
+    }
+    export namespace RONIN {
+        export interface ExtendedAdder {
+            /* Add a single record of the undefined model */
+            account: AccountAdder;
+        }
+        export interface ExtendedCounter {
+            /* Count a single record of the undefined model */
+            account: AccountCounter;
+            /* Count multiple records of the undefined model */
+            : Counter;
+        }
+        export interface ExtendedGetter {
+            /* Get a single record of the undefined model */
+            account: AccountGetter;
+            /* Get multiple records of the undefined model */
+            : Getter;
+        }
+        export interface ExtendedRemover {
+            /* Remove a single record of the undefined model */
+            account: AccountRemover;
+            /* Remove multiple records of the undefined model */
+            : Remover;
+        }
+        export interface ExtendedSetter {
+            /* Set a single record of the undefined model */
+            account: AccountSetter;
+            /* Set multiple records of the undefined model */
+            : Setter;
+        }
+    }
+}
+"
+`;
+
+exports[`module with no modules 1`] = `
+"declare module "ronin" {
+    export namespace RONIN {
+        export interface ExtendedAdder {
+        }
+        export interface ExtendedCounter {
+        }
+        export interface ExtendedGetter {
+        }
+        export interface ExtendedRemover {
+        }
+        export interface ExtendedSetter {
+        }
+    }
+}
+"
+`;
+
+exports[`module with multiple models 1`] = `
+"declare module "ronin" {
+    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
+    }
+    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
+    }
+    interface Adder extends RONIN.IAdder<AccountSchema> {
+    }
+    interface Counter extends RONIN.ICounter<AccountSchema> {
+    }
+    interface Getter extends RONIN.IGetterPlural<AccountSchema> {
+    }
+    interface Remover extends RONIN.IRemover<AccountSchema> {
+    }
+    interface Setter extends RONIN.ISetter<AccountSchema> {
+    }
+    interface PostAdder extends RONIN.IAdder<PostSchema> {
+    }
+    interface PostCounter extends RONIN.ICounter<PostSchema> {
+    }
+    interface PostGetter extends RONIN.IGetterSingular<PostSchema> {
+    }
+    interface PostRemover extends RONIN.IRemover<PostSchema> {
+    }
+    interface PostSetter extends RONIN.ISetter<PostSchema> {
+    }
+    interface Adder extends RONIN.IAdder<PostSchema> {
+    }
+    interface Counter extends RONIN.ICounter<PostSchema> {
+    }
+    interface Getter extends RONIN.IGetterPlural<PostSchema> {
+    }
+    interface Remover extends RONIN.IRemover<PostSchema> {
+    }
+    interface Setter extends RONIN.ISetter<PostSchema> {
+    }
+    export namespace RONIN {
+        export interface ExtendedAdder {
+            /* Add a single record of the undefined model */
+            account: AccountAdder;
+            /* Add a single record of the undefined model */
+            post: PostAdder;
+        }
+        export interface ExtendedCounter {
+            /* Count a single record of the undefined model */
+            account: AccountCounter;
+            /* Count multiple records of the undefined model */
+            : Counter;
+            /* Count a single record of the undefined model */
+            post: PostCounter;
+            /* Count multiple records of the undefined model */
+            : Counter;
+        }
+        export interface ExtendedGetter {
+            /* Get a single record of the undefined model */
+            account: AccountGetter;
+            /* Get multiple records of the undefined model */
+            : Getter;
+            /* Get a single record of the undefined model */
+            post: PostGetter;
+            /* Get multiple records of the undefined model */
+            : Getter;
+        }
+        export interface ExtendedRemover {
+            /* Remove a single record of the undefined model */
+            account: AccountRemover;
+            /* Remove multiple records of the undefined model */
+            : Remover;
+            /* Remove a single record of the undefined model */
+            post: PostRemover;
+            /* Remove multiple records of the undefined model */
+            : Remover;
+        }
+        export interface ExtendedSetter {
+            /* Set a single record of the undefined model */
+            account: AccountSetter;
+            /* Set multiple records of the undefined model */
+            : Setter;
+            /* Set a single record of the undefined model */
+            post: PostSetter;
+            /* Set multiple records of the undefined model */
+            : Setter;
+        }
+    }
+}
+"
+`;
