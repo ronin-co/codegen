@@ -106,7 +106,8 @@ export const generateTypes = (
     /**
      * ```ts
      * interface SchemaSlugSchema extends Syntax.ResultRecord {
-     *    name: string;
+     *    name: string | null;
+     *    email: string;
      *    // ...
      * }
      * ```
