@@ -46,8 +46,6 @@ export const generateTypes = (
       .map(([slug, field]) => ({ ...field, slug }) as ModelField)
       .filter((field) => !DEFAULT_FIELD_SLUGS.includes(field.slug));
 
-    const sortedFields = fields.sort((a, b) => a.slug.localeCompare(b.slug));
-
     const modelIdentifier = factory.createIdentifier(
       convertToPascalCase(`${model.slug}Schema`),
     );
@@ -58,7 +56,8 @@ export const generateTypes = (
       convertToPascalCase(model.pluralSlug),
     );
 
-    const mappedModelFields = sortedFields
+    const mappedModelFields = fields
+      .sort((a, b) => a.slug.localeCompare(b.slug))
       .map((field) => {
         const propertyUnionTypes = new Array<TypeNode>();
 
@@ -112,7 +111,7 @@ export const generateTypes = (
      * }
      * ```
      */
-    const modelnterfaceDec = factory.createInterfaceDeclaration(
+    const modelInterfaceDec = factory.createInterfaceDeclaration(
       undefined,
       modelIdentifier,
       [],
@@ -203,13 +202,13 @@ export const generateTypes = (
     // If the model does not have a summary / description
     // then we can continue to the next iteration & not add any comments.
     if (!model.summary) {
-      nodes.push(modelnterfaceDec, singularModelTypeDec, pluralModelTypeDec);
+      nodes.push(modelInterfaceDec, singularModelTypeDec, pluralModelTypeDec);
       continue;
     }
 
     nodes.push(
       addSyntheticLeadingComment(
-        modelnterfaceDec,
+        modelInterfaceDec,
         SyntaxKind.MultiLineCommentTrivia,
         `*\n * ${model.summary}\n `,
         true,
