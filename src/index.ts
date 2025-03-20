@@ -20,15 +20,12 @@ export const generate = (models: Array<Model>): string => {
   const nodes = new Array<Node>(importRoninNamespaceType, globImportSyntaxType);
 
   // Generate and add the type declarations for each model.
-  for (const model of models) {
-    const typeDeclarations = generateTypes(models, model);
-    for (const typeDeclaration of typeDeclarations) nodes.push(typeDeclaration);
-  }
+  const typeDeclarations = generateTypes(models);
+  for (const typeDeclaration of typeDeclarations) nodes.push(typeDeclaration);
 
   // Generate and add the `ronin` module augmentation..
-  nodes.push(generateModule(models));
+  const moduleAugmentation = generateModule(models);
+  nodes.push(moduleAugmentation);
 
-  const codeStr = printNodes(nodes);
-
-  return codeStr;
+  return printNodes(nodes);
 };

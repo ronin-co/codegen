@@ -21,12 +21,6 @@ const DEFAULT_FIELD_SLUGS = [
   'ronin.updatedBy',
 ] satisfies Array<string>;
 
-type GenerateTypesResult = [
-  InterfaceDeclaration, // Model
-  TypeAliasDeclaration, // Singular
-  TypeAliasDeclaration, // Plural
-];
-
 /**
  * Generate all required type definitions for a provided RONIN model.
  *
@@ -43,176 +37,184 @@ type GenerateTypesResult = [
  */
 export const generateTypes = (
   models: Array<Model>,
-  model: Model,
-): GenerateTypesResult => {
-  const fields: Array<ModelField> = Object.entries(model.fields)
-    .map(([slug, field]) => ({ ...field, slug }) as ModelField)
-    .filter((field) => !DEFAULT_FIELD_SLUGS.includes(field.slug));
+): Array<InterfaceDeclaration | TypeAliasDeclaration> => {
+  const nodes = new Array<InterfaceDeclaration | TypeAliasDeclaration>();
 
-  const sortedFields = fields.sort((a, b) => a.slug.localeCompare(b.slug));
+  for (const model of models) {
+    const fields: Array<ModelField> = Object.entries(model.fields)
+      .map(([slug, field]) => ({ ...field, slug }) as ModelField)
+      .filter((field) => !DEFAULT_FIELD_SLUGS.includes(field.slug));
 
-  const modelIdentifier = factory.createIdentifier(
-    convertToPascalCase(`${model.slug}Schema`),
-  );
-  const singularModelIdentifier = factory.createIdentifier(
-    convertToPascalCase(model.slug),
-  );
-  const pluralSchemaIdentifier = factory.createIdentifier(
-    convertToPascalCase(model.pluralSlug),
-  );
+    const sortedFields = fields.sort((a, b) => a.slug.localeCompare(b.slug));
 
-  const mappedModelFields = sortedFields
-    .map((field) => {
-      if (field.type === 'link') {
-        const targetModel = models.find((model) => model.slug === field.target);
+    const modelIdentifier = factory.createIdentifier(
+      convertToPascalCase(`${model.slug}Schema`),
+    );
+    const singularModelIdentifier = factory.createIdentifier(
+      convertToPascalCase(model.slug),
+    );
+    const pluralSchemaIdentifier = factory.createIdentifier(
+      convertToPascalCase(model.pluralSlug),
+    );
 
-        // If the target model cannot be found, we still add the property
-        // but instead map it to `unknown`.
-        if (!targetModel)
+    const mappedModelFields = sortedFields
+      .map((field) => {
+        if (field.type === 'link') {
+          const targetModel = models.find((model) => model.slug === field.target);
+
+          // If the target model cannot be found, we still add the property
+          // but instead map it to `unknown`.
+          if (!targetModel)
+            return factory.createPropertySignature(
+              undefined,
+              field.slug,
+              undefined,
+              factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+            );
+
           return factory.createPropertySignature(
             undefined,
             field.slug,
             undefined,
-            factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+            factory.createTypeReferenceNode(
+              convertToPascalCase(`${targetModel.slug}Schema`),
+            ),
           );
+        }
 
         return factory.createPropertySignature(
           undefined,
           field.slug,
           undefined,
-          factory.createTypeReferenceNode(
-            convertToPascalCase(`${targetModel.slug}Schema`),
-          ),
+          MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type],
         );
-      }
+      })
+      .filter(Boolean) as Array<PropertySignature>;
 
-      return factory.createPropertySignature(
-        undefined,
-        field.slug,
-        undefined,
-        MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type],
-      );
-    })
-    .filter(Boolean) as Array<PropertySignature>;
-
-  /**
-   * ```ts
-   * interface SchemaSlugSchema extends Syntax.ResultRecord {
-   *    name: string;
-   *    // ...
-   * }
-   * ```
-   */
-  const modelnterfaceDec = factory.createInterfaceDeclaration(
-    undefined,
-    modelIdentifier,
-    [],
-    [
-      // All models should extend the `Syntax.ResultRecord` interface.
-      factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
-        factory.createExpressionWithTypeArguments(
-          factory.createPropertyAccessExpression(
-            identifiers.syntax.namespace,
-            identifiers.syntax.record,
+    /**
+     * ```ts
+     * interface SchemaSlugSchema extends Syntax.ResultRecord {
+     *    name: string;
+     *    // ...
+     * }
+     * ```
+     */
+    const modelnterfaceDec = factory.createInterfaceDeclaration(
+      undefined,
+      modelIdentifier,
+      [],
+      [
+        // All models should extend the `Syntax.ResultRecord` interface.
+        factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
+          factory.createExpressionWithTypeArguments(
+            factory.createPropertyAccessExpression(
+              identifiers.syntax.namespace,
+              identifiers.syntax.record,
+            ),
+            undefined,
           ),
-          undefined,
-        ),
-      ]),
-    ],
-    mappedModelFields,
-  );
+        ]),
+      ],
+      mappedModelFields,
+    );
 
-  /**
-   * ```ts
-   * TIncluding extends RONIN.Including<SchemaInterface> = []
-   * ```
-   */
-  const includingTypeParameter = factory.createTypeParameterDeclaration(
-    undefined,
-    genericIdentifiers.including,
-    factory.createTypeReferenceNode(
+    /**
+     * ```ts
+     * TIncluding extends RONIN.Including<SchemaInterface> = []
+     * ```
+     */
+    const includingTypeParameter = factory.createTypeParameterDeclaration(
+      undefined,
+      genericIdentifiers.including,
+      factory.createTypeReferenceNode(
+        factory.createQualifiedName(
+          identifiers.ronin.namespace,
+          identifiers.util.including,
+        ),
+        [factory.createTypeReferenceNode(modelIdentifier, [])],
+      ),
+      factory.createTupleTypeNode([]),
+    );
+
+    /**
+     * ```ts
+     * RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>
+     * ```
+     */
+    const modifiedReturnType = factory.createTypeReferenceNode(
       factory.createQualifiedName(
         identifiers.ronin.namespace,
-        identifiers.util.including,
+        identifiers.util.returnBasedOnIncluding,
       ),
-      [factory.createTypeReferenceNode(modelIdentifier, [])],
-    ),
-    factory.createTupleTypeNode([]),
-  );
+      [
+        factory.createTypeReferenceNode(modelIdentifier, []),
+        factory.createTypeReferenceNode(genericIdentifiers.including, []),
+      ],
+    );
 
-  /**
-   * ```ts
-   * RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>
-   * ```
-   */
-  const modifiedReturnType = factory.createTypeReferenceNode(
-    factory.createQualifiedName(
-      identifiers.ronin.namespace,
-      identifiers.util.returnBasedOnIncluding,
-    ),
-    [
-      factory.createTypeReferenceNode(modelIdentifier, []),
-      factory.createTypeReferenceNode(genericIdentifiers.including, []),
-    ],
-  );
+    /**
+     * ```ts
+     * export type SingularSchemaSlug<
+     *    TIncluding extends RONIN.Including<SchemaInterface> = []
+     * > = RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>;
+     * ```
+     */
+    const singularModelTypeDec = factory.createTypeAliasDeclaration(
+      [factory.createModifier(SyntaxKind.ExportKeyword)],
+      singularModelIdentifier,
+      [includingTypeParameter],
+      modifiedReturnType,
+    );
 
-  /**
-   * ```ts
-   * export type SingularSchemaSlug<
-   *    TIncluding extends RONIN.Including<SchemaInterface> = []
-   * > = RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>;
-   * ```
-   */
-  const singularModelTypeDec = factory.createTypeAliasDeclaration(
-    [factory.createModifier(SyntaxKind.ExportKeyword)],
-    singularModelIdentifier,
-    [includingTypeParameter],
-    modifiedReturnType,
-  );
+    /**
+     * ```ts
+     * export type PluralSchemaSlug<
+     *    TIncluding extends RONIN.Including<SchemaInterface> = []
+     * > = Records<RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>>;
+     * ```
+     */
+    const pluralModelTypeDec = factory.createTypeAliasDeclaration(
+      [factory.createModifier(SyntaxKind.ExportKeyword)],
+      pluralSchemaIdentifier,
+      [includingTypeParameter],
 
-  /**
-   * ```ts
-   * export type PluralSchemaSlug<
-   *    TIncluding extends RONIN.Including<SchemaInterface> = []
-   * > = Records<RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>>;
-   * ```
-   */
-  const pluralModelTypeDec = factory.createTypeAliasDeclaration(
-    [factory.createModifier(SyntaxKind.ExportKeyword)],
-    pluralSchemaIdentifier,
-    [includingTypeParameter],
-
-    factory.createExpressionWithTypeArguments(
-      factory.createPropertyAccessExpression(
-        identifiers.ronin.namespace,
-        identifiers.ronin.records,
+      factory.createExpressionWithTypeArguments(
+        factory.createPropertyAccessExpression(
+          identifiers.ronin.namespace,
+          identifiers.ronin.records,
+        ),
+        [modifiedReturnType],
       ),
-      [modifiedReturnType],
-    ),
-  );
+    );
 
-  // If the model does not have a summary / description
-  // then we can return early and not try to add a comment.
-  if (!model.summary) return [modelnterfaceDec, singularModelTypeDec, pluralModelTypeDec];
+    // If the model does not have a summary / description
+    // then we can continue to the next iteration & not add any comments.
+    if (!model.summary) {
+      nodes.push(modelnterfaceDec, singularModelTypeDec, pluralModelTypeDec);
+      continue;
+    }
 
-  return [
-    addSyntheticLeadingComment(
-      modelnterfaceDec,
-      SyntaxKind.MultiLineCommentTrivia,
-      `*\n * ${model.summary}\n `,
-      true,
-    ),
-    addSyntheticLeadingComment(
-      singularModelTypeDec,
-      SyntaxKind.MultiLineCommentTrivia,
-      `*\n * ${model.summary}\n `,
-      true,
-    ),
-    addSyntheticLeadingComment(
-      pluralModelTypeDec,
-      SyntaxKind.MultiLineCommentTrivia,
-      `*\n * ${model.summary}\n `,
-      true,
-    ),
-  ];
+    nodes.push(
+      addSyntheticLeadingComment(
+        modelnterfaceDec,
+        SyntaxKind.MultiLineCommentTrivia,
+        `*\n * ${model.summary}\n `,
+        true,
+      ),
+      addSyntheticLeadingComment(
+        singularModelTypeDec,
+        SyntaxKind.MultiLineCommentTrivia,
+        `*\n * ${model.summary}\n `,
+        true,
+      ),
+      addSyntheticLeadingComment(
+        pluralModelTypeDec,
+        SyntaxKind.MultiLineCommentTrivia,
+        `*\n * ${model.summary}\n `,
+        true,
+      ),
+    );
+  }
+
+  return nodes;
 };
