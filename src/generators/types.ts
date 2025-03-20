@@ -8,6 +8,7 @@ import type {
   InterfaceDeclaration,
   PropertySignature,
   TypeAliasDeclaration,
+  TypeNode,
 } from 'typescript';
 
 import type { Model, ModelField } from '@/src/types/model';
@@ -59,34 +60,45 @@ export const generateTypes = (
 
     const mappedModelFields = sortedFields
       .map((field) => {
-        if (field.type === 'link') {
-          const targetModel = models.find((model) => model.slug === field.target);
+        const propertyUnionTypes = new Array<TypeNode>();
 
-          // If the target model cannot be found, we still add the property
-          // but instead map it to `unknown`.
-          if (!targetModel)
-            return factory.createPropertySignature(
-              undefined,
-              field.slug,
-              undefined,
-              factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+        switch (field.type) {
+          case 'link': {
+            const targetModel = models.find((model) => model.slug === field.target);
+            propertyUnionTypes.push(
+              targetModel
+                ? factory.createTypeReferenceNode(
+                    convertToPascalCase(`${targetModel.slug}Schema`),
+                  )
+                : factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
             );
-
-          return factory.createPropertySignature(
-            undefined,
-            field.slug,
-            undefined,
-            factory.createTypeReferenceNode(
-              convertToPascalCase(`${targetModel.slug}Schema`),
-            ),
-          );
+            break;
+          }
+          case 'blob':
+          case 'boolean':
+          case 'date':
+          case 'json':
+          case 'number':
+          case 'string': {
+            propertyUnionTypes.push(MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type]);
+            break;
+          }
+          default: {
+            throw new Error('Unsupported field type found', {
+              cause: field,
+            });
+          }
         }
+
+        // If the field is not required, we need to mark it as `| null`.
+        if (field.required === false)
+          propertyUnionTypes.push(factory.createLiteralTypeNode(factory.createNull()));
 
         return factory.createPropertySignature(
           undefined,
           field.slug,
           undefined,
-          MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type],
+          factory.createUnionTypeNode(propertyUnionTypes),
         );
       })
       .filter(Boolean) as Array<PropertySignature>;
