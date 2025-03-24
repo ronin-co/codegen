@@ -104,7 +104,7 @@ export const generateTypes = (
 
     /**
      * ```ts
-     * interface SchemaSlugSchema extends Syntax.ResultRecord {
+     * interface SchemaSlugSchema extends ResultRecord {
      *    name: string | null;
      *    email: string;
      *    // ...
@@ -116,13 +116,10 @@ export const generateTypes = (
       modelIdentifier,
       [],
       [
-        // All models should extend the `Syntax.ResultRecord` interface.
+        // All models should extend the `ResultRecord` interface.
         factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
           factory.createExpressionWithTypeArguments(
-            factory.createPropertyAccessExpression(
-              identifiers.syntax.namespace,
-              identifiers.syntax.record,
-            ),
+            identifiers.syntax.resultRecord,
             undefined,
           ),
         ]),
@@ -130,73 +127,30 @@ export const generateTypes = (
       mappedModelFields,
     );
 
-    /**
-     * ```ts
-     * TIncluding extends RONIN.Including<SchemaInterface> = []
-     * ```
-     */
-    const includingTypeParameter = factory.createTypeParameterDeclaration(
-      undefined,
-      genericIdentifiers.including,
-      factory.createTypeReferenceNode(
-        factory.createQualifiedName(
-          identifiers.ronin.namespace,
-          identifiers.util.including,
-        ),
-        [factory.createTypeReferenceNode(modelIdentifier, [])],
-      ),
-      factory.createTupleTypeNode([]),
-    );
+    const modelSchemaName = factory.createTypeReferenceNode(modelIdentifier, []);
 
     /**
      * ```ts
-     * RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>
-     * ```
-     */
-    const modifiedReturnType = factory.createTypeReferenceNode(
-      factory.createQualifiedName(
-        identifiers.ronin.namespace,
-        identifiers.util.returnBasedOnIncluding,
-      ),
-      [
-        factory.createTypeReferenceNode(modelIdentifier, []),
-        factory.createTypeReferenceNode(genericIdentifiers.including, []),
-      ],
-    );
-
-    /**
-     * ```ts
-     * export type SingularSchemaSlug<
-     *    TIncluding extends RONIN.Including<SchemaInterface> = []
-     * > = RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>;
+     * export type SchemaSlug = SchemaSlugSchema;
      * ```
      */
     const singularModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       singularModelIdentifier,
-      [includingTypeParameter],
-      modifiedReturnType,
+      undefined,
+      modelSchemaName,
     );
 
     /**
      * ```ts
-     * export type PluralSchemaSlug<
-     *    TIncluding extends RONIN.Including<SchemaInterface> = []
-     * > = Records<RONIN.ReturnBasedOnIncluding<SchemaInterface, TIncluding>>;
+     * export type SchemaPluralSlug = Array<SchemaSlug>;
      * ```
      */
     const pluralModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       pluralSchemaIdentifier,
-      [includingTypeParameter],
-
-      factory.createExpressionWithTypeArguments(
-        factory.createPropertyAccessExpression(
-          identifiers.ronin.namespace,
-          identifiers.ronin.records,
-        ),
-        [modifiedReturnType],
-      ),
+      undefined,
+      factory.createTypeReferenceNode(identifiers.primitive.array, [modelSchemaName]),
     );
 
     // If the model does not have a summary / description
