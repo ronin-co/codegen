@@ -22,6 +22,18 @@ export const identifiers = {
       root: factory.createIdentifier(JSON.stringify('@ronin/compiler')),
     },
   },
+  primitive: {
+    date: factory.createIdentifier('Date'),
+  },
+  ronin: {
+    // TODO(@nurodev): Remove in favour of new top-level Blob type
+    blob: factory.createIdentifier('Blob'),
+    module: {
+      root: factory.createIdentifier(JSON.stringify('ronin')),
+    },
+    // TODO(@nurodev): Remove in favour of new top-level Blob type
+    namespace: factory.createIdentifier('RONIN'),
+  },
   syntax: {
     deepCallable: factory.createIdentifier('DeepCallable'),
     module: {
