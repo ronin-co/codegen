@@ -24,6 +24,7 @@ export const identifiers = {
     storedObject: factory.createIdentifier('StoredObject'),
   },
   primitive: {
+    array: factory.createIdentifier('Array'),
     date: factory.createIdentifier('Date'),
   },
   ronin: {
