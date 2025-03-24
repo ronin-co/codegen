@@ -1,28 +1,6 @@
 import { identifiers } from '@/src/constants/identifiers';
 import { createImportDeclaration } from '@/src/generators/import';
 
-// /**
-//  * ```ts
-//  * import type { RONIN } from 'ronin';
-//  * ```
-//  */
-// export const importRoninNamespaceType = createImportDeclaration({
-//   identifiers: [{ name: identifiers.ronin.namespace }],
-//   module: identifiers.ronin.module.root,
-//   type: true,
-// });
-
-// /**
-//  * ```ts
-//  * import type * as Syntax from '@ronin/syntax/queries';
-//  * ```
-//  */
-// export const globImportSyntaxType = createGlobImportDeclaration({
-//   identifier: identifiers.syntax.namespace,
-//   module: identifiers.syntax.module,
-//   type: true,
-// });
-
 /**
  * ```ts
  * import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
@@ -34,6 +12,7 @@ export const importRoninQueryTypesType = createImportDeclaration({
     { name: identifiers.compiler.queryType.count },
     { name: identifiers.compiler.queryType.get },
     { name: identifiers.compiler.queryType.remove },
+    { name: identifiers.compiler.storedObject },
     { name: identifiers.compiler.queryType.set },
   ],
   module: identifiers.compiler.module.root,

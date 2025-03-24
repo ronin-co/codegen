@@ -21,6 +21,7 @@ export const identifiers = {
     module: {
       root: factory.createIdentifier(JSON.stringify('@ronin/compiler')),
     },
+    storedObject: factory.createIdentifier('StoredObject'),
   },
   primitive: {
     date: factory.createIdentifier('Date'),
