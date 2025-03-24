@@ -8,6 +8,7 @@ describe('module', () => {
   test('a basic model', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),
@@ -34,6 +35,7 @@ describe('module', () => {
   test('with multiple models', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),
@@ -42,6 +44,7 @@ describe('module', () => {
 
     const PostModel = model({
       slug: 'post',
+      pluralSlug: 'posts',
       fields: {
         title: string({ required: true }),
         description: string(),

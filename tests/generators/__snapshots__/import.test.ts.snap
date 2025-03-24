@@ -24,13 +24,3 @@ exports[`import an import with mixed typed identifiers 1`] = `
 "import { Foo, type Bar } from "ronin";
 "
 `;
-
-exports[`glob import a simple glob import statement 1`] = `
-"import * as Syntax from "@ronin/syntax";
-"
-`;
-
-exports[`glob import a type glob import statement 1`] = `
-"import type * as Syntax from "@ronin/syntax";
-"
-`;

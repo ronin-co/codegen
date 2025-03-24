@@ -8,6 +8,7 @@ describe('types', () => {
   test('a basic model', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),
@@ -28,6 +29,7 @@ describe('types', () => {
   test('a model with a summary', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),
@@ -50,6 +52,7 @@ describe('types', () => {
   test('a model with a link field', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),
@@ -78,6 +81,7 @@ describe('types', () => {
   test('a model with a link field that does not exist', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),

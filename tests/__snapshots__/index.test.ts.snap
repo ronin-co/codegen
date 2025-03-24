@@ -1,87 +1,56 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generate a basic model 1`] = `
-"import type { RONIN } from "ronin";
-import type * as Syntax from "@ronin/syntax/queries";
-interface AccountSchema extends Syntax.ResultRecord {
+"import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
+interface AccountSchema extends ResultRecord {
     email: string;
     name: string;
 }
-export type Account<TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>;
-export type <TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+export type Account = AccountSchema;
+export type Accounts = Array<AccountSchema>;
 declare module "ronin" {
-    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
-    }
-    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
-    }
-    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
-    }
-    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
-    }
-    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
-    }
-    interface Adder extends RONIN.IAdder<AccountSchema> {
-    }
-    interface Counter extends RONIN.ICounter<AccountSchema> {
-    }
-    interface Getter extends RONIN.IGetterPlural<AccountSchema> {
-    }
-    interface Remover extends RONIN.IRemover<AccountSchema> {
-    }
-    interface Setter extends RONIN.ISetter<AccountSchema> {
-    }
-    export namespace RONIN {
-        export interface ExtendedAdder {
-            /* Add a single record of the undefined model */
-            account: AccountAdder;
-        }
-        export interface ExtendedCounter {
-            /* Count a single record of the undefined model */
-            account: AccountCounter;
-            /* Count multiple records of the undefined model */
-            : Counter;
-        }
-        export interface ExtendedGetter {
-            /* Get a single record of the undefined model */
-            account: AccountGetter;
-            /* Get multiple records of the undefined model */
-            : Getter;
-        }
-        export interface ExtendedRemover {
-            /* Remove a single record of the undefined model */
-            account: AccountRemover;
-            /* Remove multiple records of the undefined model */
-            : Remover;
-        }
-        export interface ExtendedSetter {
-            /* Set a single record of the undefined model */
-            account: AccountSetter;
-            /* Set multiple records of the undefined model */
-            : Setter;
-        }
-    }
+    declare const add: {
+        /* Add a single account record */
+        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+    };
+    declare const count: {
+        /* Count a single account record */
+        account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+        /* Count multiple account records */
+        accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+    };
+    declare const get: {
+        /* Get a single account record */
+        account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+        /* Get multiple account records */
+        accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+    };
+    declare const remove: {
+        /* Remove a single account record */
+        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+        /* Remove multiple account records */
+        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    };
+    declare const set: {
+        /* Set a single account record */
+        account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+        /* Set multiple account records */
+        accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+    };
 }
 "
 `;
 
 exports[`generate with no models 1`] = `
-"import type { RONIN } from "ronin";
-import type * as Syntax from "@ronin/syntax/queries";
+"import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 declare module "ronin" {
-    export namespace RONIN {
-        export interface ExtendedAdder {
-        }
-        export interface ExtendedCounter {
-        }
-        export interface ExtendedGetter {
-        }
-        export interface ExtendedRemover {
-        }
-        export interface ExtendedSetter {
-        }
-    }
+    declare const add: {};
+    declare const count: {};
+    declare const get: {};
+    declare const remove: {};
+    declare const set: {};
 }
 "
 `;
