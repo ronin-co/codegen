@@ -37,7 +37,7 @@ exports[`types a model with a link field 1`] = `
 export type Account = AccountSchema;
 export type Accounts = Array<AccountSchema>;
 interface PostSchema extends ResultRecord {
-    author: AccountSchema;
+    author: AccountSchema | unknown;
     title: string;
 }
 export type Post = PostSchema;
@@ -48,7 +48,7 @@ export type  = Array<PostSchema>;
 exports[`types a model with a link field that does not exist 1`] = `
 "interface AccountSchema extends ResultRecord {
     email: string;
-    latestPost: unknown;
+    latestPost: unknown | unknown;
     name: string;
 }
 export type Account = AccountSchema;

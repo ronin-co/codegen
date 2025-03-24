@@ -60,32 +60,20 @@ export const generateTypes = (
       .map((field) => {
         const propertyUnionTypes = new Array<TypeNode>();
 
-        switch (field.type) {
-          case 'link': {
-            const targetModel = models.find((model) => model.slug === field.target);
-            propertyUnionTypes.push(
-              targetModel
-                ? factory.createTypeReferenceNode(
-                    convertToPascalCase(`${targetModel.slug}Schema`),
-                  )
-                : factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-            );
-            break;
-          }
-          case 'blob':
-          case 'boolean':
-          case 'date':
-          case 'json':
-          case 'number':
-          case 'string': {
-            propertyUnionTypes.push(MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type]);
-            break;
-          }
-          default: {
-            throw new Error('Unsupported field type found', {
-              cause: field,
-            });
-          }
+        if (field.type === 'link') {
+          const targetModel = models.find((model) => model.slug === field.target);
+          propertyUnionTypes.push(
+            targetModel
+              ? factory.createTypeReferenceNode(
+                  convertToPascalCase(`${targetModel.slug}Schema`),
+                )
+              : factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+          );
+        }
+
+        if (Object.keys(MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD).includes(field.type)) {
+          const primitive = MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type];
+          propertyUnionTypes.push(primitive);
         }
 
         // If the field is not required, we need to mark it as `| null`.
