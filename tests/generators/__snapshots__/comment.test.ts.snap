@@ -1,36 +1,36 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`commnent ExtendedAdder 1`] = `
+exports[`comment add 1`] = `
 {
-  "plural": " Add multiple records of the account model ",
-  "singular": " Add a single record of the account model ",
+  "plural": " Add multiple account records ",
+  "singular": " Add a single account record ",
 }
 `;
 
-exports[`commnent ExtendedCounter 1`] = `
+exports[`comment count 1`] = `
 {
-  "plural": " Count multiple records of the account model ",
-  "singular": " Count a single record of the account model ",
+  "plural": " Count multiple account records ",
+  "singular": " Count a single account record ",
 }
 `;
 
-exports[`commnent ExtendedGetter 1`] = `
+exports[`comment get 1`] = `
 {
-  "plural": " Get multiple records of the account model ",
-  "singular": " Get a single record of the account model ",
+  "plural": " Get multiple account records ",
+  "singular": " Get a single account record ",
 }
 `;
 
-exports[`commnent ExtendedRemover 1`] = `
+exports[`comment remove 1`] = `
 {
-  "plural": " Remove multiple records of the account model ",
-  "singular": " Remove a single record of the account model ",
+  "plural": " Remove multiple account records ",
+  "singular": " Remove a single account record ",
 }
 `;
 
-exports[`commnent ExtendedSetter 1`] = `
+exports[`comment set 1`] = `
 {
-  "plural": " Set multiple records of the account model ",
-  "singular": " Set a single record of the account model ",
+  "plural": " Set multiple account records ",
+  "singular": " Set a single account record ",
 }
 `;

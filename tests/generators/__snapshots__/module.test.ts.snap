@@ -2,168 +2,97 @@
 
 exports[`module a basic model 1`] = `
 "declare module "ronin" {
-    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
-    }
-    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
-    }
-    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
-    }
-    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
-    }
-    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
-    }
-    interface Adder extends RONIN.IAdder<AccountSchema> {
-    }
-    interface Counter extends RONIN.ICounter<AccountSchema> {
-    }
-    interface Getter extends RONIN.IGetterPlural<AccountSchema> {
-    }
-    interface Remover extends RONIN.IRemover<AccountSchema> {
-    }
-    interface Setter extends RONIN.ISetter<AccountSchema> {
-    }
-    export namespace RONIN {
-        export interface ExtendedAdder {
-            /* Add a single record of the undefined model */
-            account: AccountAdder;
-        }
-        export interface ExtendedCounter {
-            /* Count a single record of the undefined model */
-            account: AccountCounter;
-            /* Count multiple records of the undefined model */
-            : Counter;
-        }
-        export interface ExtendedGetter {
-            /* Get a single record of the undefined model */
-            account: AccountGetter;
-            /* Get multiple records of the undefined model */
-            : Getter;
-        }
-        export interface ExtendedRemover {
-            /* Remove a single record of the undefined model */
-            account: AccountRemover;
-            /* Remove multiple records of the undefined model */
-            : Remover;
-        }
-        export interface ExtendedSetter {
-            /* Set a single record of the undefined model */
-            account: AccountSetter;
-            /* Set multiple records of the undefined model */
-            : Setter;
-        }
-    }
+    declare const add: {
+        /* Add a single account record */
+        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+    };
+    declare const count: {
+        /* Count a single account record */
+        account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+        /* Count multiple account records */
+        accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+    };
+    declare const get: {
+        /* Get a single account record */
+        account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+        /* Get multiple account records */
+        accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+    };
+    declare const remove: {
+        /* Remove a single account record */
+        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+        /* Remove multiple account records */
+        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    };
+    declare const set: {
+        /* Set a single account record */
+        account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+        /* Set multiple account records */
+        accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+    };
 }
 "
 `;
 
 exports[`module with no modules 1`] = `
 "declare module "ronin" {
-    export namespace RONIN {
-        export interface ExtendedAdder {
-        }
-        export interface ExtendedCounter {
-        }
-        export interface ExtendedGetter {
-        }
-        export interface ExtendedRemover {
-        }
-        export interface ExtendedSetter {
-        }
-    }
+    declare const add: {};
+    declare const count: {};
+    declare const get: {};
+    declare const remove: {};
+    declare const set: {};
 }
 "
 `;
 
 exports[`module with multiple models 1`] = `
 "declare module "ronin" {
-    interface AccountAdder extends RONIN.IAdder<AccountSchema> {
-    }
-    interface AccountCounter extends RONIN.ICounter<AccountSchema> {
-    }
-    interface AccountGetter extends RONIN.IGetterSingular<AccountSchema> {
-    }
-    interface AccountRemover extends RONIN.IRemover<AccountSchema> {
-    }
-    interface AccountSetter extends RONIN.ISetter<AccountSchema> {
-    }
-    interface Adder extends RONIN.IAdder<AccountSchema> {
-    }
-    interface Counter extends RONIN.ICounter<AccountSchema> {
-    }
-    interface Getter extends RONIN.IGetterPlural<AccountSchema> {
-    }
-    interface Remover extends RONIN.IRemover<AccountSchema> {
-    }
-    interface Setter extends RONIN.ISetter<AccountSchema> {
-    }
-    interface PostAdder extends RONIN.IAdder<PostSchema> {
-    }
-    interface PostCounter extends RONIN.ICounter<PostSchema> {
-    }
-    interface PostGetter extends RONIN.IGetterSingular<PostSchema> {
-    }
-    interface PostRemover extends RONIN.IRemover<PostSchema> {
-    }
-    interface PostSetter extends RONIN.ISetter<PostSchema> {
-    }
-    interface Adder extends RONIN.IAdder<PostSchema> {
-    }
-    interface Counter extends RONIN.ICounter<PostSchema> {
-    }
-    interface Getter extends RONIN.IGetterPlural<PostSchema> {
-    }
-    interface Remover extends RONIN.IRemover<PostSchema> {
-    }
-    interface Setter extends RONIN.ISetter<PostSchema> {
-    }
-    export namespace RONIN {
-        export interface ExtendedAdder {
-            /* Add a single record of the undefined model */
-            account: AccountAdder;
-            /* Add a single record of the undefined model */
-            post: PostAdder;
-        }
-        export interface ExtendedCounter {
-            /* Count a single record of the undefined model */
-            account: AccountCounter;
-            /* Count multiple records of the undefined model */
-            : Counter;
-            /* Count a single record of the undefined model */
-            post: PostCounter;
-            /* Count multiple records of the undefined model */
-            : Counter;
-        }
-        export interface ExtendedGetter {
-            /* Get a single record of the undefined model */
-            account: AccountGetter;
-            /* Get multiple records of the undefined model */
-            : Getter;
-            /* Get a single record of the undefined model */
-            post: PostGetter;
-            /* Get multiple records of the undefined model */
-            : Getter;
-        }
-        export interface ExtendedRemover {
-            /* Remove a single record of the undefined model */
-            account: AccountRemover;
-            /* Remove multiple records of the undefined model */
-            : Remover;
-            /* Remove a single record of the undefined model */
-            post: PostRemover;
-            /* Remove multiple records of the undefined model */
-            : Remover;
-        }
-        export interface ExtendedSetter {
-            /* Set a single record of the undefined model */
-            account: AccountSetter;
-            /* Set multiple records of the undefined model */
-            : Setter;
-            /* Set a single record of the undefined model */
-            post: PostSetter;
-            /* Set multiple records of the undefined model */
-            : Setter;
-        }
-    }
+    declare const add: {
+        /* Add a single account record */
+        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+        /* Add a single post record */
+        post: DeepCallable<AddQuery[keyof AddQuery], Post | null>;
+    };
+    declare const count: {
+        /* Count a single account record */
+        account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+        /* Count multiple account records */
+        accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+        /* Count a single post record */
+        post: DeepCallable<CountQuery[keyof CountQuery], Post | null>;
+        /* Count multiple post records */
+        posts: DeepCallable<CountQuery[keyof CountQuery], Posts>;
+    };
+    declare const get: {
+        /* Get a single account record */
+        account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+        /* Get multiple account records */
+        accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+        /* Get a single post record */
+        post: DeepCallable<GetQuery[keyof GetQuery], Post | null>;
+        /* Get multiple post records */
+        posts: DeepCallable<GetQuery[keyof GetQuery], Posts>;
+    };
+    declare const remove: {
+        /* Remove a single account record */
+        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+        /* Remove multiple account records */
+        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+        /* Remove a single post record */
+        post: DeepCallable<RemoveQuery[keyof RemoveQuery], Post | null>;
+        /* Remove multiple post records */
+        posts: DeepCallable<RemoveQuery[keyof RemoveQuery], Posts>;
+    };
+    declare const set: {
+        /* Set a single account record */
+        account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+        /* Set multiple account records */
+        accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+        /* Set a single post record */
+        post: DeepCallable<SetQuery[keyof SetQuery], Post | null>;
+        /* Set multiple post records */
+        posts: DeepCallable<SetQuery[keyof SetQuery], Posts>;
+    };
 }
 "
 `;

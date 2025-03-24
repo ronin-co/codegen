@@ -2,31 +2,31 @@ import { describe, expect, test } from 'bun:test';
 
 import { generateQueryTypeComment } from '@/src/generators/comment';
 
-describe('commnent', () => {
+describe('comment', () => {
   const modelName = 'account';
 
-  test('ExtendedAdder', () => {
-    const comment = generateQueryTypeComment(modelName, 'ExtendedAdder');
+  test('add', () => {
+    const comment = generateQueryTypeComment(modelName, 'add');
     expect(comment).toMatchSnapshot();
   });
 
-  test('ExtendedCounter', () => {
-    const comment = generateQueryTypeComment(modelName, 'ExtendedCounter');
+  test('count', () => {
+    const comment = generateQueryTypeComment(modelName, 'count');
     expect(comment).toMatchSnapshot();
   });
 
-  test('ExtendedGetter', () => {
-    const comment = generateQueryTypeComment(modelName, 'ExtendedGetter');
+  test('get', () => {
+    const comment = generateQueryTypeComment(modelName, 'get');
     expect(comment).toMatchSnapshot();
   });
 
-  test('ExtendedRemover', () => {
-    const comment = generateQueryTypeComment(modelName, 'ExtendedRemover');
+  test('remove', () => {
+    const comment = generateQueryTypeComment(modelName, 'remove');
     expect(comment).toMatchSnapshot();
   });
 
-  test('ExtendedSetter', () => {
-    const comment = generateQueryTypeComment(modelName, 'ExtendedSetter');
+  test('set', () => {
+    const comment = generateQueryTypeComment(modelName, 'set');
     expect(comment).toMatchSnapshot();
   });
 });

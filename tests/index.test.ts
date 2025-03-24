@@ -7,6 +7,7 @@ describe('generate', () => {
   test('a basic model', () => {
     const AccountModel = model({
       slug: 'account',
+      pluralSlug: 'accounts',
       fields: {
         name: string(),
         email: string({ required: true }),

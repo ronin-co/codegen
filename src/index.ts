@@ -1,4 +1,8 @@
-import { globImportSyntaxType, importRoninNamespaceType } from '@/src/declarations';
+import {
+  importRoninQueryTypesType,
+  importRoninStoredObjectType,
+  importSyntaxUtiltypesType,
+} from '@/src/declarations';
 import { generateModule } from '@/src/generators/module';
 import { generateTypes } from '@/src/generators/types';
 import { printNodes } from '@/src/utils/print';
@@ -17,18 +21,22 @@ import type { Model } from '@/src/types/model';
 export const generate = (models: Array<Model>): string => {
   // Each node represents any kind of "block" like
   // an import statement, interface, namespace, etc.
-  const nodes = new Array<Node>(importRoninNamespaceType, globImportSyntaxType);
+  const nodes = new Array<Node>(importRoninQueryTypesType, importSyntaxUtiltypesType);
+
+  // If there is any models that have a `blob()` field, we need to import the
+  // `StoredObject` type from the `@ronin/compiler` package.
+  const hasStoredObjectField = models.some((model) =>
+    Object.values(model.fields).some((field) => field.type === 'blob'),
+  );
+  if (hasStoredObjectField) nodes.push(importRoninStoredObjectType);
 
   // Generate and add the type declarations for each model.
-  for (const model of models) {
-    const typeDeclarations = generateTypes(models, model);
-    for (const typeDeclaration of typeDeclarations) nodes.push(typeDeclaration);
-  }
+  const typeDeclarations = generateTypes(models);
+  for (const typeDeclaration of typeDeclarations) nodes.push(typeDeclaration);
 
   // Generate and add the `ronin` module augmentation..
-  nodes.push(generateModule(models));
+  const moduleAugmentation = generateModule(models);
+  nodes.push(moduleAugmentation);
 
-  const codeStr = printNodes(nodes);
-
-  return codeStr;
+  return printNodes(nodes);
 };

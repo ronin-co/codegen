@@ -19,6 +19,6 @@ export const generateQueryTypeComment = (
   modelName: string,
   queryType: (typeof QUERY_TYPE_NAMES)[number],
 ): GenerateQueryTypeCommentResult => ({
-  singular: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} a single record of the ${modelName} model `,
-  plural: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} multiple records of the ${modelName} model `,
+  singular: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} a single ${modelName} record `,
+  plural: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} multiple ${modelName} records `,
 });

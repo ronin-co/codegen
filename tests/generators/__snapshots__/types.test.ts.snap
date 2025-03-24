@@ -1,14 +1,12 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`types a basic model 1`] = `
-"interface AccountSchema extends Syntax.ResultRecord {
+"interface AccountSchema extends ResultRecord {
     email: string;
     name: string;
 }
-export type Account<TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>;
-export type <TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+export type Account = AccountSchema;
+export type Accounts = Array<AccountSchema>;
 "
 `;
 
@@ -16,44 +14,44 @@ exports[`types a model with a summary 1`] = `
 "/**
  * A user account.
  */
-interface AccountSchema extends Syntax.ResultRecord {
+interface AccountSchema extends ResultRecord {
     email: string;
     name: string;
 }
 /**
  * A user account.
  */
-export type Account<TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>;
+export type Account = AccountSchema;
 /**
  * A user account.
  */
-export type <TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+export type Accounts = Array<AccountSchema>;
 "
 `;
 
 exports[`types a model with a link field 1`] = `
-"interface PostSchema extends Syntax.ResultRecord {
-    author: AccountSchema;
+"interface AccountSchema extends ResultRecord {
+    email: string;
+    name: string;
+}
+export type Account = AccountSchema;
+export type Accounts = Array<AccountSchema>;
+interface PostSchema extends ResultRecord {
+    author: AccountSchema | unknown;
     title: string;
 }
-export type Post<TIncluding extends RONIN.Including<PostSchema> = [
-]> = RONIN.ReturnBasedOnIncluding<PostSchema, TIncluding>;
-export type <TIncluding extends RONIN.Including<PostSchema> = [
-]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<PostSchema, TIncluding>>;
+export type Post = PostSchema;
+export type  = Array<PostSchema>;
 "
 `;
 
 exports[`types a model with a link field that does not exist 1`] = `
-"interface AccountSchema extends Syntax.ResultRecord {
+"interface AccountSchema extends ResultRecord {
     email: string;
-    latestPost: unknown;
+    latestPost: unknown | unknown;
     name: string;
 }
-export type Account<TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>;
-export type <TIncluding extends RONIN.Including<AccountSchema> = [
-]> = RONIN.RoninRecords<RONIN.ReturnBasedOnIncluding<AccountSchema, TIncluding>>;
+export type Account = AccountSchema;
+export type Accounts = Array<AccountSchema>;
 "
 `;
