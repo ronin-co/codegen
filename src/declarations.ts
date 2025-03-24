@@ -31,7 +31,7 @@ export const importRoninStoredObjectType = createImportDeclaration({
 
 /**
  * ```ts
- * import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+ * import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
  * ```
  */
 export const importSyntaxUtiltypesType = createImportDeclaration({
