@@ -10,13 +10,7 @@ import type { ModelField } from '@/src/types/model';
  * A list of all model field types & their TypeScript type mapping.
  */
 export const MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD = {
-  blob: factory.createExpressionWithTypeArguments(
-    factory.createPropertyAccessExpression(
-      identifiers.ronin.namespace,
-      identifiers.ronin.blob,
-    ),
-    undefined,
-  ),
+  blob: factory.createTypeReferenceNode(identifiers.compiler.storedObject),
   boolean: factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
   date: factory.createTypeReferenceNode(identifiers.primitive.date),
   json: factory.createKeywordTypeNode(SyntaxKind.ObjectKeyword),
