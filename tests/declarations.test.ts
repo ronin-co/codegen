@@ -1,18 +1,31 @@
 import { describe, expect, test } from 'bun:test';
 
-import { globImportSyntaxType, importRoninNamespaceType } from '@/src/declarations';
+import {
+  importRoninQueryTypesType,
+  importRoninStoredObjectType,
+  importSyntaxUtiltypesType,
+} from '@/src/declarations';
 import { printNodes } from '@/src/utils/print';
 
 describe('declarations', () => {
   test('import the RONIN namespace type from `ronin`', () => {
-    const output = printNodes([importRoninNamespaceType]);
-    expect(output).toStrictEqual(`import type { RONIN } from \"ronin\";\n`);
+    const output = printNodes([importRoninQueryTypesType]);
+    expect(output).toStrictEqual(
+      `import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from \"@ronin/compiler\";\n`,
+    );
   });
 
-  test('glob import from `@ronin/syntax`', () => {
-    const output = printNodes([globImportSyntaxType]);
+  test('import the RONIN namespace type from `ronin`', () => {
+    const output = printNodes([importRoninStoredObjectType]);
     expect(output).toStrictEqual(
-      `import type * as Syntax from \"@ronin/syntax/queries\";\n`,
+      `import type { StoredObject } from \"@ronin/compiler\";\n`,
+    );
+  });
+
+  test('import the RONIN namespace type from `ronin`', () => {
+    const output = printNodes([importSyntaxUtiltypesType]);
+    expect(output).toStrictEqual(
+      `import type { DeepCallable, ResultRecord } from \"@ronin/syntax/queries\";\n`,
     );
   });
 });

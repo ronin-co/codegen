@@ -71,7 +71,7 @@ describe('types', () => {
     // @ts-expect-error Codegen models types differ from the schema model types.
     const typesResult = generateTypes([AccountModel, PostModel], PostModel);
 
-    expect(typesResult).toHaveLength(3);
+    expect(typesResult).toHaveLength(6);
 
     const typesResultStr = printNodes(typesResult);
 
