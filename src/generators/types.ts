@@ -25,14 +25,13 @@ const DEFAULT_FIELD_SLUGS = [
 /**
  * Generate all required type definitions for a provided RONIN model.
  *
- * This will generate an interface for the singular model type and a type alias
- * for the plural model type.
+ * This will generate a shared schema interface that is then used to create type
+ * aliases for both the singular and plural model types.
  *
  * The plural model type will be mapped to an array of the singular model type
  * and extend it with the plural model properties.
  *
  * @param models - All RONIN models of the addressed space.
- * @param model - A RONIN model to generate type definitions for.
  *
  * @returns - An array of type nodes to be added to the `index.d.ts` file.
  */
