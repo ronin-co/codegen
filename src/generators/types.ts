@@ -1,6 +1,6 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
-import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
+import { identifiers } from '@/src/constants/identifiers';
 import { MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD } from '@/src/constants/schema';
 import { convertToPascalCase } from '@/src/utils/slug';
 
