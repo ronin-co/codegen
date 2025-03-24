@@ -7,6 +7,7 @@ interface CreateImportDeclarationOptions {
    * A list of all the identifiers that should be imported.
    */
   identifiers: Array<{
+    alias?: Identifier;
     /**
      * The name of the identifier to import.
      */
@@ -51,7 +52,11 @@ export const createImportDeclaration = (
 ): ImportDeclaration => {
   const namedBindings = factory.createNamedImports(
     options.identifiers.map((identifier) =>
-      factory.createImportSpecifier(identifier.type ?? false, undefined, identifier.name),
+      factory.createImportSpecifier(
+        identifier.type ?? false,
+        identifier.alias ? identifier.name : undefined,
+        identifier.alias ? identifier.alias : identifier.name,
+      ),
     ),
   );
 
