@@ -12,9 +12,19 @@ export const importRoninQueryTypesType = createImportDeclaration({
     { name: identifiers.compiler.queryType.count },
     { name: identifiers.compiler.queryType.get },
     { name: identifiers.compiler.queryType.remove },
-    { name: identifiers.compiler.storedObject },
     { name: identifiers.compiler.queryType.set },
   ],
+  module: identifiers.compiler.module.root,
+  type: true,
+});
+
+/**
+ * ```ts
+ * import type { StoredObject } from "@ronin/compiler";
+ * ```
+ */
+export const importRoninStoredObjectType = createImportDeclaration({
+  identifiers: [{ name: identifiers.compiler.storedObject }],
   module: identifiers.compiler.module.root,
   type: true,
 });
