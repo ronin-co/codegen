@@ -1,10 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { factory } from 'typescript';
 
-import {
-  createGlobImportDeclaration,
-  createImportDeclaration,
-} from '@/src/generators/import';
+import { createImportDeclaration } from '@/src/generators/import';
 import { printNodes } from '@/src/utils/print';
 
 // Note: We need to `JSON.stringify` the module name to ensure that the
@@ -68,31 +65,6 @@ describe('import', () => {
         { name: factory.createIdentifier('Bar'), type: true },
       ],
       module: roninModuleIdentifier,
-    });
-
-    const output = printNodes([declaration]);
-
-    expect(output).toMatchSnapshot();
-  });
-});
-
-describe('glob import', () => {
-  test('a simple glob import statement', () => {
-    const declaration = createGlobImportDeclaration({
-      identifier: factory.createIdentifier('Syntax'),
-      module: factory.createIdentifier(JSON.stringify('@ronin/syntax')),
-    });
-
-    const output = printNodes([declaration]);
-
-    expect(output).toMatchSnapshot();
-  });
-
-  test('a type glob import statement', () => {
-    const declaration = createGlobImportDeclaration({
-      identifier: factory.createIdentifier('Syntax'),
-      module: factory.createIdentifier(JSON.stringify('@ronin/syntax')),
-      type: true,
     });
 
     const output = printNodes([declaration]);

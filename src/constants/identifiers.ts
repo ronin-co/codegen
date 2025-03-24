@@ -10,38 +10,24 @@ import type { Identifier } from 'typescript';
  * Here we simply store a list of all identifiers used in the code generation package.
  */
 export const identifiers = {
-  primitive: {
-    date: factory.createIdentifier('Date'),
-    partial: factory.createIdentifier('Partial'),
-    record: factory.createIdentifier('Record'),
-  },
-  ronin: {
-    accessor: {
-      adder: factory.createIdentifier('IAdder'),
-      counter: factory.createIdentifier('ICounter'),
-      getterPlural: factory.createIdentifier('IGetterPlural'),
-      getterSingular: factory.createIdentifier('IGetterSingular'),
-      remover: factory.createIdentifier('IRemover'),
-      setter: factory.createIdentifier('ISetter'),
+  compiler: {
+    queryType: {
+      add: factory.createIdentifier('AddQuery'),
+      count: factory.createIdentifier('CountQuery'),
+      get: factory.createIdentifier('GetQuery'),
+      remove: factory.createIdentifier('RemoveQuery'),
+      set: factory.createIdentifier('SetQuery'),
     },
-    blob: factory.createIdentifier('Blob'),
     module: {
-      root: factory.createIdentifier(JSON.stringify('ronin')),
-      schema: factory.createIdentifier(JSON.stringify('ronin/schema')),
+      root: factory.createIdentifier(JSON.stringify('@ronin/compiler')),
     },
-    namespace: factory.createIdentifier('RONIN'),
-    record: factory.createIdentifier('RoninRecord'),
-    records: factory.createIdentifier('RoninRecords'),
   },
   syntax: {
-    module: factory.createIdentifier(JSON.stringify('@ronin/syntax/queries')),
-    namespace: factory.createIdentifier('Syntax'),
-    record: factory.createIdentifier('ResultRecord'),
-  },
-  util: {
-    including: factory.createIdentifier('Including'),
-    prettify: factory.createIdentifier('Prettify'),
-    returnBasedOnIncluding: factory.createIdentifier('ReturnBasedOnIncluding'),
+    deepCallable: factory.createIdentifier('DeepCallable'),
+    module: {
+      queries: factory.createIdentifier(JSON.stringify('@ronin/syntax/queries')),
+    },
+    resultRecord: factory.createIdentifier('ResultRecord'),
   },
 } satisfies Record<string, Record<string, Identifier | Record<string, Identifier>>>;
 

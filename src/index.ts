@@ -1,4 +1,4 @@
-import { globImportSyntaxType, importRoninNamespaceType } from '@/src/declarations';
+import { importRoninQueryTypesType, importSyntaxUtiltypesType } from '@/src/declarations';
 import { generateModule } from '@/src/generators/module';
 import { generateTypes } from '@/src/generators/types';
 import { printNodes } from '@/src/utils/print';
@@ -17,7 +17,7 @@ import type { Model } from '@/src/types/model';
 export const generate = (models: Array<Model>): string => {
   // Each node represents any kind of "block" like
   // an import statement, interface, namespace, etc.
-  const nodes = new Array<Node>(importRoninNamespaceType, globImportSyntaxType);
+  const nodes = new Array<Node>(importRoninQueryTypesType, importSyntaxUtiltypesType);
 
   // Generate and add the type declarations for each model.
   const typeDeclarations = generateTypes(models);
