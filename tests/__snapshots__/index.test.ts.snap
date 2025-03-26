@@ -8,7 +8,10 @@ interface AccountSchema extends ResultRecord {
     name: string;
 }
 export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema>;
+export type Accounts = Array<AccountSchema> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
 declare module "ronin" {
     declare const add: {
         /* Add a single account record */

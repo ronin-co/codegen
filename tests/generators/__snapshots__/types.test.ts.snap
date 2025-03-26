@@ -6,7 +6,10 @@ exports[`types a basic model 1`] = `
     name: string;
 }
 export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema>;
+export type Accounts = Array<AccountSchema> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
 "
 `;
 
@@ -25,7 +28,10 @@ export type Account = AccountSchema;
 /**
  * A user account.
  */
-export type Accounts = Array<AccountSchema>;
+export type Accounts = Array<AccountSchema> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
 "
 `;
 
@@ -35,13 +41,19 @@ exports[`types a model with a link field 1`] = `
     name: string;
 }
 export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema>;
+export type Accounts = Array<AccountSchema> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
 interface PostSchema extends ResultRecord {
     author: AccountSchema | unknown;
     title: string;
 }
 export type Post = PostSchema;
-export type  = Array<PostSchema>;
+export type  = Array<PostSchema> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
 "
 `;
 
@@ -52,6 +64,9 @@ exports[`types a model with a link field that does not exist 1`] = `
     name: string;
 }
 export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema>;
+export type Accounts = Array<AccountSchema> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
 "
 `;
