@@ -130,6 +130,39 @@ export const generateTypes = (
 
     /**
      * ```ts
+     * Array<SchemaSlug>;
+     * ```
+     */
+    const pluralModelArrayTypeDec = factory.createTypeReferenceNode(
+      identifiers.primitive.array,
+      [modelSchemaName],
+    );
+
+    /**
+     * ```ts
+     * {
+     *  moreBefore?: string;
+     *  moreAfter?: string;
+     * };
+     * ```
+     */
+    const pluralModelPaginationPropsTypeDec = factory.createTypeLiteralNode([
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier('moreBefore'),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ),
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier('moreAfter'),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ),
+    ]);
+
+    /**
+     * ```ts
      * export type SchemaPluralSlug = Array<SchemaSlug>;
      * ```
      */
@@ -137,7 +170,10 @@ export const generateTypes = (
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       pluralSchemaIdentifier,
       undefined,
-      factory.createTypeReferenceNode(identifiers.primitive.array, [modelSchemaName]),
+      factory.createIntersectionTypeNode([
+        pluralModelArrayTypeDec,
+        pluralModelPaginationPropsTypeDec,
+      ]),
     );
 
     // If the model does not have a summary / description
