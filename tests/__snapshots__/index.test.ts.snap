@@ -3,17 +3,16 @@
 exports[`generate a basic model 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
-interface AccountSchema extends ResultRecord {
-    email: string;
-    name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
-    moreBefore?: string;
-    moreAfter?: string;
-};
 declare module "ronin" {
-    export type { Account, Accounts };
+    interface AccountSchema extends ResultRecord {
+        email: string;
+        name: string;
+    }
+    export type Account = AccountSchema;
+    export type Accounts = Array<AccountSchema> & {
+        moreBefore?: string;
+        moreAfter?: string;
+    };
     declare const add: {
         /* Add a single account record */
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
@@ -50,7 +49,6 @@ exports[`generate with no models 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 declare module "ronin" {
-    export type {};
     declare const add: {};
     declare const count: {};
     declare const get: {};
