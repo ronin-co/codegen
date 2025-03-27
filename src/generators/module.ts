@@ -35,17 +35,9 @@ export const generateModule = (
     moduleBodyStatements.push(schemaTypeDec);
   }
 
-  /**
-   * ```ts
-   * declare const add: {};
-   * declare const count: {};
-   * declare const get: {};
-   * declare const remove: {};
-   * declare const set: {};
-   * ```
-   */
-  for (const queryType of QUERY_TYPE_NAMES) {
+  const mappedQueryTypeVariableDeclarations = QUERY_TYPE_NAMES.map((queryType) => {
     const declarationProperties = new Array<TypeElement>();
+
     for (const model of models) {
       const comment = generateQueryTypeComment(model, queryType);
       const singularModelIdentifier = factory.createTypeReferenceNode(
@@ -126,6 +118,22 @@ export const generateModule = (
       );
     }
 
+    return {
+      properties: declarationProperties,
+      queryType,
+    };
+  });
+
+  /**
+   * ```ts
+   * declare const add: { ... };
+   * declare const count: { ... };
+   * declare const get: { ... };
+   * declare const remove: { ... };
+   * declare const set: { ... };
+   * ```
+   */
+  for (const { properties, queryType } of mappedQueryTypeVariableDeclarations) {
     const queryDeclaration = factory.createVariableStatement(
       [factory.createModifier(SyntaxKind.DeclareKeyword)],
       factory.createVariableDeclarationList(
@@ -133,7 +141,7 @@ export const generateModule = (
           factory.createVariableDeclaration(
             queryType,
             undefined,
-            factory.createTypeLiteralNode(declarationProperties),
+            factory.createTypeLiteralNode(properties),
           ),
         ],
         NodeFlags.Const,
@@ -142,6 +150,79 @@ export const generateModule = (
 
     moduleBodyStatements.push(queryDeclaration);
   }
+
+  // Note: `csf` prefix stands for `createSyntaxFactory`.
+  const csfParameterTypeDec = factory.createParameterDeclaration(
+    undefined,
+    undefined,
+    'options',
+    undefined,
+    factory.createUnionTypeNode([
+      factory.createTypeReferenceNode(identifiers.ronin.queryHandlerOptions),
+      factory.createFunctionTypeNode(
+        undefined,
+        [],
+        factory.createTypeReferenceNode(identifiers.ronin.queryHandlerOptions),
+      ),
+    ]),
+  );
+  const csfReturnTypeDec = factory.createTypeLiteralNode(
+    mappedQueryTypeVariableDeclarations.map(({ properties, queryType }) => {
+      return factory.createPropertySignature(
+        undefined,
+        queryType,
+        undefined,
+        factory.createTypeLiteralNode(properties),
+      );
+    }),
+  );
+
+  moduleBodyStatements.push(
+    /**
+     * ```ts
+     * declare const createSyntaxFactory: (
+     *  options: QueryHandlerOptions | (() => QueryHandlerOptions)
+     * ) => { ... }
+     * ```
+     */
+    factory.createVariableStatement(
+      [factory.createModifier(SyntaxKind.DeclareKeyword)],
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            identifiers.ronin.createSyntaxFactory,
+            undefined,
+            factory.createFunctionTypeNode(
+              undefined,
+              [csfParameterTypeDec],
+              csfReturnTypeDec,
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+
+    /**
+     * ```ts
+     * export default function (
+     *  options: QueryHandlerOptions | (() => QueryHandlerOptions)
+     * ) => { ... }
+     * ```
+     */
+    factory.createFunctionDeclaration(
+      [
+        factory.createModifier(SyntaxKind.ExportKeyword),
+        factory.createModifier(SyntaxKind.DefaultKeyword),
+      ],
+      undefined,
+      undefined,
+      undefined,
+      [csfParameterTypeDec],
+      csfReturnTypeDec,
+      undefined,
+    ),
+  );
 
   return factory.createModuleDeclaration(
     [factory.createModifier(SyntaxKind.DeclareKeyword)],

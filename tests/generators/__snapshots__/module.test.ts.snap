@@ -39,6 +39,66 @@ exports[`module a basic model 1`] = `
         /* Set multiple account records */
         accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
     };
+    declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
+        add: {
+            /* Add a single account record */
+            account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+        };
+        count: {
+            /* Count a single account record */
+            account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+            /* Count multiple account records */
+            accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+        };
+        get: {
+            /* Get a single account record */
+            account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+            /* Get multiple account records */
+            accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+        };
+        remove: {
+            /* Remove a single account record */
+            account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+            /* Remove multiple account records */
+            accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+        };
+        set: {
+            /* Set a single account record */
+            account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+            /* Set multiple account records */
+            accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+        };
+    };
+    export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
+        add: {
+            /* Add a single account record */
+            account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+        };
+        count: {
+            /* Count a single account record */
+            account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+            /* Count multiple account records */
+            accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+        };
+        get: {
+            /* Get a single account record */
+            account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+            /* Get multiple account records */
+            accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+        };
+        remove: {
+            /* Remove a single account record */
+            account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+            /* Remove multiple account records */
+            accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+        };
+        set: {
+            /* Set a single account record */
+            account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+            /* Set multiple account records */
+            accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+        };
+    };
 }
 "
 `;
@@ -50,6 +110,20 @@ exports[`module with no modules 1`] = `
     declare const get: {};
     declare const remove: {};
     declare const set: {};
+    declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
+        add: {};
+        count: {};
+        get: {};
+        remove: {};
+        set: {};
+    };
+    export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
+        add: {};
+        count: {};
+        get: {};
+        remove: {};
+        set: {};
+    };
 }
 "
 `;
@@ -119,6 +193,102 @@ exports[`module with multiple models 1`] = `
         post: DeepCallable<SetQuery[keyof SetQuery], Post | null>;
         /* Set multiple post records */
         posts: DeepCallable<SetQuery[keyof SetQuery], Posts>;
+    };
+    declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
+        add: {
+            /* Add a single account record */
+            account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+            /* Add a single post record */
+            post: DeepCallable<AddQuery[keyof AddQuery], Post | null>;
+        };
+        count: {
+            /* Count a single account record */
+            account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+            /* Count multiple account records */
+            accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+            /* Count a single post record */
+            post: DeepCallable<CountQuery[keyof CountQuery], Post | null>;
+            /* Count multiple post records */
+            posts: DeepCallable<CountQuery[keyof CountQuery], Posts>;
+        };
+        get: {
+            /* Get a single account record */
+            account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+            /* Get multiple account records */
+            accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+            /* Get a single post record */
+            post: DeepCallable<GetQuery[keyof GetQuery], Post | null>;
+            /* Get multiple post records */
+            posts: DeepCallable<GetQuery[keyof GetQuery], Posts>;
+        };
+        remove: {
+            /* Remove a single account record */
+            account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+            /* Remove multiple account records */
+            accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+            /* Remove a single post record */
+            post: DeepCallable<RemoveQuery[keyof RemoveQuery], Post | null>;
+            /* Remove multiple post records */
+            posts: DeepCallable<RemoveQuery[keyof RemoveQuery], Posts>;
+        };
+        set: {
+            /* Set a single account record */
+            account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+            /* Set multiple account records */
+            accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+            /* Set a single post record */
+            post: DeepCallable<SetQuery[keyof SetQuery], Post | null>;
+            /* Set multiple post records */
+            posts: DeepCallable<SetQuery[keyof SetQuery], Posts>;
+        };
+    };
+    export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
+        add: {
+            /* Add a single account record */
+            account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+            /* Add a single post record */
+            post: DeepCallable<AddQuery[keyof AddQuery], Post | null>;
+        };
+        count: {
+            /* Count a single account record */
+            account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
+            /* Count multiple account records */
+            accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+            /* Count a single post record */
+            post: DeepCallable<CountQuery[keyof CountQuery], Post | null>;
+            /* Count multiple post records */
+            posts: DeepCallable<CountQuery[keyof CountQuery], Posts>;
+        };
+        get: {
+            /* Get a single account record */
+            account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
+            /* Get multiple account records */
+            accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+            /* Get a single post record */
+            post: DeepCallable<GetQuery[keyof GetQuery], Post | null>;
+            /* Get multiple post records */
+            posts: DeepCallable<GetQuery[keyof GetQuery], Posts>;
+        };
+        remove: {
+            /* Remove a single account record */
+            account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+            /* Remove multiple account records */
+            accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+            /* Remove a single post record */
+            post: DeepCallable<RemoveQuery[keyof RemoveQuery], Post | null>;
+            /* Remove multiple post records */
+            posts: DeepCallable<RemoveQuery[keyof RemoveQuery], Posts>;
+        };
+        set: {
+            /* Set a single account record */
+            account: DeepCallable<SetQuery[keyof SetQuery], Account | null>;
+            /* Set multiple account records */
+            accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
+            /* Set a single post record */
+            post: DeepCallable<SetQuery[keyof SetQuery], Post | null>;
+            /* Set multiple post records */
+            posts: DeepCallable<SetQuery[keyof SetQuery], Posts>;
+        };
     };
 }
 "
