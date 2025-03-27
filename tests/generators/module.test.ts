@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { model, string } from 'ronin/schema';
 
 import { generateModule } from '@/src/generators/module';
+import { generateTypes } from '@/src/generators/types';
 import { printNodes } from '@/src/utils/print';
 
 describe('module', () => {
@@ -15,9 +16,19 @@ describe('module', () => {
       },
     });
 
+    const models = [AccountModel];
+
     // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
-    // @ts-expect-error Codegen models types differ from the schema model types.
-    const moduleDeclaration = generateModule([AccountModel]);
+    const schemas = generateTypes(
+      // @ts-expect-error Codegen models types differ from the schema model types.
+      models,
+    );
+
+    const moduleDeclaration = generateModule(
+      // @ts-expect-error Codegen models types differ from the schema model types.
+      models,
+      schemas,
+    );
 
     const moduleDeclarationStr = printNodes([moduleDeclaration]);
 
@@ -25,7 +36,7 @@ describe('module', () => {
   });
 
   test('with no modules', () => {
-    const moduleDeclaration = generateModule([]);
+    const moduleDeclaration = generateModule([], []);
 
     const moduleDeclarationStr = printNodes([moduleDeclaration]);
 
@@ -51,8 +62,19 @@ describe('module', () => {
       },
     });
 
-    // @ts-expect-error Codegen models types differ from the schema model types.
-    const moduleDeclaration = generateModule([AccountModel, PostModel]);
+    const models = [AccountModel, PostModel];
+
+    // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
+    const schemas = generateTypes(
+      // @ts-expect-error Codegen models types differ from the schema model types.
+      models,
+    );
+
+    const moduleDeclaration = generateModule(
+      // @ts-expect-error Codegen models types differ from the schema model types.
+      models,
+      schemas,
+    );
     const moduleDeclarationStr = printNodes([moduleDeclaration]);
     expect(moduleDeclarationStr).toMatchSnapshot();
   });

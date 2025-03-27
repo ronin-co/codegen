@@ -2,7 +2,15 @@
 
 exports[`module a basic model 1`] = `
 "declare module "ronin" {
-    export type { Account, Accounts };
+    interface AccountSchema extends ResultRecord {
+        email: string;
+        name: string;
+    }
+    export type Account = AccountSchema;
+    export type Accounts = Array<AccountSchema> & {
+        moreBefore?: string;
+        moreAfter?: string;
+    };
     declare const add: {
         /* Add a single account record */
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
@@ -37,7 +45,6 @@ exports[`module a basic model 1`] = `
 
 exports[`module with no modules 1`] = `
 "declare module "ronin" {
-    export type {};
     declare const add: {};
     declare const count: {};
     declare const get: {};
@@ -49,7 +56,24 @@ exports[`module with no modules 1`] = `
 
 exports[`module with multiple models 1`] = `
 "declare module "ronin" {
-    export type { Account, Accounts, Post, Posts };
+    interface AccountSchema extends ResultRecord {
+        email: string;
+        name: string;
+    }
+    export type Account = AccountSchema;
+    export type Accounts = Array<AccountSchema> & {
+        moreBefore?: string;
+        moreAfter?: string;
+    };
+    interface PostSchema extends ResultRecord {
+        description: string;
+        title: string;
+    }
+    export type Post = PostSchema;
+    export type Posts = Array<PostSchema> & {
+        moreBefore?: string;
+        moreAfter?: string;
+    };
     declare const add: {
         /* Add a single account record */
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;

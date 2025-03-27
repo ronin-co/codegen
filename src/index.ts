@@ -37,10 +37,9 @@ export const generate = (models: Array<Model>): string => {
 
   // Generate and add the type declarations for each model.
   const typeDeclarations = generateTypes(models);
-  for (const typeDeclaration of typeDeclarations) nodes.push(typeDeclaration);
 
   // Generate and add the `ronin` module augmentation..
-  const moduleAugmentation = generateModule(models);
+  const moduleAugmentation = generateModule(models, typeDeclarations);
   nodes.push(moduleAugmentation);
 
   return printNodes(nodes);
