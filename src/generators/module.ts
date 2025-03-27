@@ -152,6 +152,12 @@ export const generateModule = (
   }
 
   // Note: `csf` prefix stands for `createSyntaxFactory`.
+
+  /**
+   * ```ts
+   * (options: QueryHandlerOptions | (() => QueryHandlerOptions))
+   * ```
+   */
   const csfParameterTypeDec = factory.createParameterDeclaration(
     undefined,
     undefined,
@@ -166,6 +172,18 @@ export const generateModule = (
       ),
     ]),
   );
+
+  /**
+   * ```ts
+   * (...) => {
+   *  add: { ... },
+   *  count: { ... },
+   *  get: { ... },
+   *  remove: { ... },
+   *  set: { ... },
+   * }
+   * ```
+   */
   const csfReturnTypeDec = factory.createTypeLiteralNode(
     mappedQueryTypeVariableDeclarations.map(({ properties, queryType }) => {
       return factory.createPropertySignature(
