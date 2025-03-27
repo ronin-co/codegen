@@ -59,7 +59,7 @@ export const generateModule = (models: Array<Model>): ModuleDeclaration => {
   for (const queryType of QUERY_TYPE_NAMES) {
     const declarationProperties = new Array<TypeElement>();
     for (const model of models) {
-      const comment = generateQueryTypeComment(model.slug, queryType);
+      const comment = generateQueryTypeComment(model, queryType);
       const singularModelIdentifier = factory.createTypeReferenceNode(
         convertToPascalCase(model.slug),
       );
