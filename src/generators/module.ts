@@ -176,23 +176,23 @@ export const generateModule = (
   /**
    * ```ts
    * (...) => {
-   *  add: { ... },
-   *  count: { ... },
-   *  get: { ... },
-   *  remove: { ... },
-   *  set: { ... },
+   *  add: typeof add,
+   *  count: typeof count,
+   *  get: typeof get,
+   *  remove: typeof remove,
+   *  set: typeof set,
    * }
    * ```
    */
   const csfReturnTypeDec = factory.createTypeLiteralNode(
-    mappedQueryTypeVariableDeclarations.map(({ properties, queryType }) => {
-      return factory.createPropertySignature(
+    QUERY_TYPE_NAMES.map((queryType) =>
+      factory.createPropertySignature(
         undefined,
-        queryType,
+        factory.createIdentifier(queryType),
         undefined,
-        factory.createTypeLiteralNode(properties),
-      );
-    }),
+        factory.createTypeQueryNode(factory.createIdentifier(queryType)),
+      ),
+    ),
   );
 
   moduleBodyStatements.push(
