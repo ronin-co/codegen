@@ -1,6 +1,7 @@
 import { READABLE_QUERY_TYPE_NAMES } from '@/src/constants/schema';
 
 import type { QUERY_TYPE_NAMES } from '@/src/constants/schema';
+import type { Model } from '@/src/types/model';
 
 interface GenerateQueryTypeCommentResult {
   singular: string;
@@ -16,9 +17,9 @@ interface GenerateQueryTypeCommentResult {
  * @returns An object containing both the singular and plural comment strings.
  */
 export const generateQueryTypeComment = (
-  modelName: string,
+  model: Model,
   queryType: (typeof QUERY_TYPE_NAMES)[number],
 ): GenerateQueryTypeCommentResult => ({
-  singular: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} a single ${modelName} record `,
-  plural: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} multiple ${modelName} records `,
+  singular: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} a single ${model.name ?? model.slug} record `,
+  plural: ` ${READABLE_QUERY_TYPE_NAMES[queryType]} multiple ${model.name ?? model.slug} records `,
 });
