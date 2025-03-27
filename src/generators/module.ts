@@ -21,6 +21,41 @@ import type { Model } from '@/src/types/model';
 export const generateModule = (models: Array<Model>): ModuleDeclaration => {
   const moduleBodyStatements = new Array<Statement>();
 
+  /**
+   * ```ts
+   * export type { Account, Accounts };
+   * ```
+   */
+  const exportTypeDeclaration = factory.createExportDeclaration(
+    undefined,
+    true,
+    factory.createNamedExports(
+      models.flatMap((model) => {
+        const singularModelIdentifier = factory.createIdentifier(
+          convertToPascalCase(model.slug),
+        );
+        const pluralSchemaIdentifier = factory.createIdentifier(
+          convertToPascalCase(model.pluralSlug),
+        );
+
+        return [
+          factory.createExportSpecifier(false, undefined, singularModelIdentifier),
+          factory.createExportSpecifier(false, undefined, pluralSchemaIdentifier),
+        ];
+      }),
+    ),
+  );
+  moduleBodyStatements.push(exportTypeDeclaration);
+
+  /**
+   * ```ts
+   * declare const add: {};
+   * declare const count: {};
+   * declare const get: {};
+   * declare const remove: {};
+   * declare const set: {};
+   * ```
+   */
   for (const queryType of QUERY_TYPE_NAMES) {
     const declarationProperties = new Array<TypeElement>();
     for (const model of models) {
