@@ -28,8 +28,10 @@ export const identifiers = {
     date: factory.createIdentifier('Date'),
   },
   ronin: {
+    queryHandlerOptions: factory.createIdentifier('QueryHandlerOptions'),
     module: {
       root: factory.createIdentifier(JSON.stringify('ronin')),
+      types: factory.createIdentifier(JSON.stringify('ronin/types')),
     },
   },
   syntax: {

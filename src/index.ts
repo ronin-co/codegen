@@ -1,4 +1,5 @@
 import {
+  importQueryHandlerOptionsType,
   importRoninQueryTypesType,
   importRoninStoredObjectType,
   importSyntaxUtiltypesType,
@@ -21,7 +22,11 @@ import type { Model } from '@/src/types/model';
 export const generate = (models: Array<Model>): string => {
   // Each node represents any kind of "block" like
   // an import statement, interface, namespace, etc.
-  const nodes = new Array<Node>(importRoninQueryTypesType, importSyntaxUtiltypesType);
+  const nodes = new Array<Node>(
+    importRoninQueryTypesType,
+    importSyntaxUtiltypesType,
+    importQueryHandlerOptionsType,
+  );
 
   // If there is any models that have a `blob()` field, we need to import the
   // `StoredObject` type from the `@ronin/compiler` package.

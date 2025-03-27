@@ -42,3 +42,14 @@ export const importSyntaxUtiltypesType = createImportDeclaration({
   module: identifiers.syntax.module.queries,
   type: true,
 });
+
+/**
+ * ```ts
+ * import type { QueryHandlerOptions } from "ronin/types";
+ * ```
+ */
+export const importQueryHandlerOptionsType = createImportDeclaration({
+  identifiers: [{ name: identifiers.ronin.queryHandlerOptions }],
+  module: identifiers.ronin.module.types,
+  type: true,
+});
