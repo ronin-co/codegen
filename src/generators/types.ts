@@ -55,25 +55,53 @@ export const generateTypes = (
       convertToPascalCase(model.pluralSlug),
     );
 
+    const hasLinkFields = fields.some((field) => field.type === 'link');
     const mappedModelFields = fields
       .sort((a, b) => a.slug.localeCompare(b.slug))
       .map((field) => {
         const propertyUnionTypes = new Array<TypeNode>();
 
-        if (field.type === 'link') {
-          const targetModel = models.find((model) => model.slug === field.target);
-          propertyUnionTypes.push(
-            targetModel
-              ? factory.createTypeReferenceNode(
-                  convertToPascalCase(`${targetModel.slug}Schema`),
-                )
-              : factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-          );
-        }
+        switch (field.type) {
+          case 'link': {
+            // Check to make sure the target model exists. If it doesn't we
+            // fall back to using `unknown` as the type.
+            const targetModel = models.find((model) => model.slug === field.target);
+            if (!targetModel) {
+              propertyUnionTypes.push(
+                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+              );
+              break;
+            }
 
-        if (Object.keys(MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD).includes(field.type)) {
-          const primitive = MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type];
-          propertyUnionTypes.push(primitive);
+            // If the field is marked as `many` then we need to wrap the
+            // type in an array.
+            const schemaTypeRef = factory.createTypeReferenceNode(modelIdentifier);
+            propertyUnionTypes.push(
+              field.kind === 'many'
+                ? factory.createTypeReferenceNode(identifiers.primitive.array, [
+                    schemaTypeRef,
+                  ])
+                : schemaTypeRef,
+            );
+
+            break;
+          }
+          case 'blob':
+          case 'boolean':
+          case 'date':
+          case 'json':
+          case 'number':
+          case 'string': {
+            const primitive = MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type];
+            propertyUnionTypes.push(primitive);
+            break;
+          }
+          default: {
+            propertyUnionTypes.push(
+              factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+            );
+            break;
+          }
         }
 
         // If the field is not required, we need to mark it as `| null`.
