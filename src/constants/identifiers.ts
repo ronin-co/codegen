@@ -50,8 +50,5 @@ export const identifiers = {
  * Similar to `identifiers` but designed specifically for use as generic names.
  */
 export const genericIdentifiers = {
-  including: factory.createIdentifier('TIncluding'),
-  key: factory.createIdentifier('TKey'),
-  schema: factory.createIdentifier('TSchema'),
-  slug: factory.createIdentifier('TSlug'),
+  using: factory.createIdentifier('TUsing'),
 } satisfies Record<string, Identifier>;
