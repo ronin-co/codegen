@@ -1,8 +1,18 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`module with no modules 1`] = `
+"declare module "ronin" {
+    declare const add: {};
+    declare const count: {};
+    declare const get: {};
+    declare const remove: {};
+    declare const set: {};
+}
+"
+`;
+
 exports[`module a basic model 1`] = `
 "declare module "ronin" {
-    export type { Account, Accounts };
     declare const add: {
         /* Add a single account record */
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
@@ -35,21 +45,8 @@ exports[`module a basic model 1`] = `
 "
 `;
 
-exports[`module with no modules 1`] = `
-"declare module "ronin" {
-    export type {};
-    declare const add: {};
-    declare const count: {};
-    declare const get: {};
-    declare const remove: {};
-    declare const set: {};
-}
-"
-`;
-
 exports[`module with multiple models 1`] = `
 "declare module "ronin" {
-    export type { Account, Accounts, Post, Posts };
     declare const add: {
         /* Add a single account record */
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;

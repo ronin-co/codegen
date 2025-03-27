@@ -5,7 +5,13 @@ import { QUERY_TYPE_NAMES } from '@/src/constants/schema';
 import { generateQueryTypeComment } from '@/src/generators/comment';
 import { convertToPascalCase } from '@/src/utils/slug';
 
-import type { ModuleDeclaration, Statement, TypeElement } from 'typescript';
+import type {
+  InterfaceDeclaration,
+  ModuleDeclaration,
+  Statement,
+  TypeAliasDeclaration,
+  TypeElement,
+} from 'typescript';
 
 import type { Model } from '@/src/types/model';
 
@@ -15,37 +21,19 @@ import type { Model } from '@/src/types/model';
  * this space.
  *
  * @param models - An array of RONIN models to generate type definitions for.
+ * @param schemas - An array of type declarations for the models.
  *
  * @returns A module augmentation declaration to be added to `index.d.ts`.
  */
-export const generateModule = (models: Array<Model>): ModuleDeclaration => {
+export const generateModule = (
+  models: Array<Model>,
+  schemas: Array<InterfaceDeclaration | TypeAliasDeclaration>,
+): ModuleDeclaration => {
   const moduleBodyStatements = new Array<Statement>();
 
-  /**
-   * ```ts
-   * export type { Account, Accounts };
-   * ```
-   */
-  const exportTypeDeclaration = factory.createExportDeclaration(
-    undefined,
-    true,
-    factory.createNamedExports(
-      models.flatMap((model) => {
-        const singularModelIdentifier = factory.createIdentifier(
-          convertToPascalCase(model.slug),
-        );
-        const pluralSchemaIdentifier = factory.createIdentifier(
-          convertToPascalCase(model.pluralSlug),
-        );
-
-        return [
-          factory.createExportSpecifier(false, undefined, singularModelIdentifier),
-          factory.createExportSpecifier(false, undefined, pluralSchemaIdentifier),
-        ];
-      }),
-    ),
-  );
-  moduleBodyStatements.push(exportTypeDeclaration);
+  for (const schemaTypeDec of schemas) {
+    moduleBodyStatements.push(schemaTypeDec);
+  }
 
   /**
    * ```ts
