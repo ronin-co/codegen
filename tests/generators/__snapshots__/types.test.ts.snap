@@ -47,11 +47,13 @@ export type Accounts = Array<AccountSchema> & {
 };
 interface PostSchema<TUsing extends Array<"author"> | "all" = [
 ]> extends ResultRecord {
-    author: AccountSchema;
+    author: ResolveSchema<AccountSchema, TUsing, "author">;
     title: string;
 }
-export type Post = PostSchema;
-export type  = Array<PostSchema> & {
+export type Post<TUsing extends Array<"author"> | "all" = [
+]> = PostSchema<TUsing>;
+export type <TUsing extends Array<"author"> | "all" = [
+]> = Array<PostSchema<TUsing>> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -59,8 +61,7 @@ export type  = Array<PostSchema> & {
 `;
 
 exports[`types a model with a link field that does not exist 1`] = `
-"interface AccountSchema<TUsing extends Array<"latestPost"> | "all" = [
-]> extends ResultRecord {
+"interface AccountSchema extends ResultRecord {
     email: string;
     latestPost: unknown;
     name: string;
