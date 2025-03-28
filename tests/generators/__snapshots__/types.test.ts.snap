@@ -30,6 +30,17 @@ export type Accounts = Array<Account> & {
 "
 `;
 
+exports[`types a model with an invalid field type 1`] = `
+"export type Account = ResultRecord & {
+    name: unknown;
+};
+export type Accounts = Array<Account> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
+"
+`;
+
 exports[`types a model with a link field 1`] = `
 "export type Account = ResultRecord & {
     email: string;
@@ -46,6 +57,28 @@ export type Post<TUsing extends Array<"author"> | "all" = [
 };
 export type Posts<TUsing extends Array<"author"> | "all" = [
 ]> = Array<Post<TUsing>> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
+"
+`;
+
+exports[`types a model with a many-to-many link field 1`] = `
+"export type Account = ResultRecord & {
+    email: string;
+    name: string;
+};
+export type Accounts = Array<Account> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
+export type Space<TUsing extends Array<"members"> | "all" = [
+]> = ResultRecord & {
+    members: ResolveSchema<Array<Account>, TUsing, "members">;
+    name: string;
+};
+export type Spaces<TUsing extends Array<"members"> | "all" = [
+]> = Array<Space<TUsing>> & {
     moreBefore?: string;
     moreAfter?: string;
 };
