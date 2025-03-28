@@ -33,7 +33,6 @@
   "author": "ronin",
   "license": "Apache-2.0",
   "dependencies": {
-    "ronin": "6.2.26",
     "typescript": "5.7.3"
   },
   "devDependencies": {
