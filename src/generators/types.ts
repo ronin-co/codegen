@@ -185,9 +185,10 @@ export const generateTypes = (
      * SchemaSlugSchema<TUsing>
      * ```
      */
-    const modelSchemaName = factory.createTypeReferenceNode(modelIdentifier, [
-      factory.createTypeReferenceNode(genericIdentifiers.using),
-    ]);
+    const modelSchemaName = factory.createTypeReferenceNode(
+      modelIdentifier,
+      hasLinkFields ? [factory.createTypeReferenceNode(genericIdentifiers.using)] : [],
+    );
 
     /**
      * ```ts
