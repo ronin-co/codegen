@@ -1,12 +1,11 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`types a basic model 1`] = `
-"interface AccountSchema extends ResultRecord {
+"export type Account = ResultRecord & {
     email: string;
     name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -17,18 +16,14 @@ exports[`types a model with a summary 1`] = `
 "/**
  * A user account.
  */
-interface AccountSchema extends ResultRecord {
+export type Account = ResultRecord & {
     email: string;
     name: string;
-}
+};
 /**
  * A user account.
  */
-export type Account = AccountSchema;
-/**
- * A user account.
- */
-export type Accounts = Array<AccountSchema> & {
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -36,24 +31,21 @@ export type Accounts = Array<AccountSchema> & {
 `;
 
 exports[`types a model with a link field 1`] = `
-"interface AccountSchema extends ResultRecord {
+"export type Account = ResultRecord & {
     email: string;
     name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };
-interface PostSchema<TUsing extends Array<"author"> | "all" = [
-]> extends ResultRecord {
-    author: ResolveSchema<AccountSchema, TUsing, "author">;
-    title: string;
-}
 export type Post<TUsing extends Array<"author"> | "all" = [
-]> = PostSchema<TUsing>;
+]> = ResultRecord & {
+    author: ResolveSchema<Account, TUsing, "author">;
+    title: string;
+};
 export type <TUsing extends Array<"author"> | "all" = [
-]> = Array<PostSchema<TUsing>> & {
+]> = Array<Post<TUsing>> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -61,13 +53,12 @@ export type <TUsing extends Array<"author"> | "all" = [
 `;
 
 exports[`types a model with a link field that does not exist 1`] = `
-"interface AccountSchema extends ResultRecord {
+"export type Account = ResultRecord & {
     email: string;
     latestPost: unknown;
     name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };

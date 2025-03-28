@@ -4,7 +4,7 @@ exports[`generate a basic model 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
-export type ResolveSchema<TSchema, TUsing extends Array<string> | "all", TKey extends string> = TUsing extends "all" ? TSchema : TKey extends TUsing[number] ? TSchema : TSchema extends Array<any> ? Array<string> : string;
+type ResolveSchema<TSchema, TUsing extends Array<string> | "all", TKey extends string> = TUsing extends "all" ? TSchema : TKey extends TUsing[number] ? TSchema : TSchema extends Array<any> ? Array<string> : string;
 declare module "ronin" {
     export type Account = ResultRecord & {
         email: string;
@@ -64,7 +64,7 @@ exports[`generate with no models 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
-export type ResolveSchema<TSchema, TUsing extends Array<string> | "all", TKey extends string> = TUsing extends "all" ? TSchema : TKey extends TUsing[number] ? TSchema : TSchema extends Array<any> ? Array<string> : string;
+type ResolveSchema<TSchema, TUsing extends Array<string> | "all", TKey extends string> = TUsing extends "all" ? TSchema : TKey extends TUsing[number] ? TSchema : TSchema extends Array<any> ? Array<string> : string;
 declare module "ronin" {
     declare const add: {};
     declare const count: {};
