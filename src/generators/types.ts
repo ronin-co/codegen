@@ -46,9 +46,6 @@ export const generateTypes = (
       .map(([slug, field]) => ({ ...field, slug }) as ModelField)
       .filter((field) => !DEFAULT_FIELD_SLUGS.includes(field.slug));
 
-    const modelIdentifier = factory.createIdentifier(
-      convertToPascalCase(`${model.slug}Schema`),
-    );
     const singularModelIdentifier = factory.createIdentifier(
       convertToPascalCase(model.slug),
     );
@@ -80,7 +77,7 @@ export const generateTypes = (
             // If the field is marked as `many` then we need to wrap the
             // type in an array.
             const schemaTypeRef = factory.createTypeReferenceNode(
-              convertToPascalCase(`${targetModel.slug}Schema`),
+              convertToPascalCase(targetModel.slug),
             );
             const resolvedLinkFieldNode = factory.createTypeReferenceNode(
               identifiers.utils.resolveSchema,
@@ -160,36 +157,11 @@ export const generateTypes = (
 
     /**
      * ```ts
-     * interface SchemaSlugSchema extends ResultRecord {
-     *    name: string | null;
-     *    email: string;
-     *    // ...
-     * }
-     * ```
-     */
-    const modelInterfaceDec = factory.createInterfaceDeclaration(
-      undefined,
-      modelIdentifier,
-      modelInterfaceTypeParameters,
-      [
-        // All models should extend the `ResultRecord` interface.
-        factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
-          factory.createExpressionWithTypeArguments(
-            identifiers.syntax.resultRecord,
-            undefined,
-          ),
-        ]),
-      ],
-      mappedModelFields,
-    );
-
-    /**
-     * ```ts
      * SchemaSlugSchema<TUsing>
      * ```
      */
     const modelSchemaName = factory.createTypeReferenceNode(
-      modelIdentifier,
+      singularModelIdentifier,
       hasLinkFields ? [factory.createTypeReferenceNode(genericIdentifiers.using)] : [],
     );
 
@@ -202,7 +174,13 @@ export const generateTypes = (
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       singularModelIdentifier,
       modelInterfaceTypeParameters,
-      modelSchemaName,
+      factory.createIntersectionTypeNode([
+        factory.createExpressionWithTypeArguments(
+          identifiers.syntax.resultRecord,
+          undefined,
+        ),
+        factory.createTypeLiteralNode(mappedModelFields),
+      ]),
     );
 
     /**
@@ -256,17 +234,11 @@ export const generateTypes = (
     // If the model does not have a summary / description
     // then we can continue to the next iteration & not add any comments.
     if (!model.summary) {
-      nodes.push(modelInterfaceDec, singularModelTypeDec, pluralModelTypeDec);
+      nodes.push(singularModelTypeDec, pluralModelTypeDec);
       continue;
     }
 
     nodes.push(
-      addSyntheticLeadingComment(
-        modelInterfaceDec,
-        SyntaxKind.MultiLineCommentTrivia,
-        `*\n * ${model.summary}\n `,
-        true,
-      ),
       addSyntheticLeadingComment(
         singularModelTypeDec,
         SyntaxKind.MultiLineCommentTrivia,
