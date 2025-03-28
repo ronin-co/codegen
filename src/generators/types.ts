@@ -76,7 +76,9 @@ export const generateTypes = (
 
             // If the field is marked as `many` then we need to wrap the
             // type in an array.
-            const schemaTypeRef = factory.createTypeReferenceNode(modelIdentifier);
+            const schemaTypeRef = factory.createTypeReferenceNode(
+              convertToPascalCase(`${targetModel.slug}Schema`),
+            );
             propertyUnionTypes.push(
               field.kind === 'many'
                 ? factory.createTypeReferenceNode(identifiers.primitive.array, [
