@@ -131,7 +131,7 @@ export const resolveSchemaType = factory.createTypeAliasDeclaration(
       factory.createConditionalTypeNode(
         factory.createTypeReferenceNode(genericIdentifiers.schema),
         factory.createTypeReferenceNode(identifiers.primitive.array, [
-          factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+          factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
         ]),
         factory.createTypeReferenceNode(identifiers.primitive.array, [
           factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
