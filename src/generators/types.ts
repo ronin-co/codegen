@@ -138,7 +138,7 @@ export const generateTypes = (
 
     /**
      * ```ts
-     * <TUsing extends Array<'foo' | 'bar'> | 'all' = []>
+     * <TUsing extends Array<...> | 'all' = []>
      * ```
      */
     const usingGenericDec = factory.createTypeParameterDeclaration(
@@ -167,7 +167,9 @@ export const generateTypes = (
 
     /**
      * ```ts
-     * export type SchemaSlug = SchemaSlugSchema;
+     * export type SchemaSlug<TUsing extends Array<...> | 'all' = []> = ResultRecord & {
+     *  // ...
+     * };
      * ```
      */
     const singularModelTypeDec = factory.createTypeAliasDeclaration(
@@ -218,7 +220,10 @@ export const generateTypes = (
 
     /**
      * ```ts
-     * export type SchemaPluralSlug = Array<SchemaSlug>;
+     * export type SchemaPluralSlug<TUsing extends Array<...> | 'all' = []> = Array<SchemaSlug> & {
+     *  moreBefore?: string;
+     *  moreAfter?: string;
+     * };
      * ```
      */
     const pluralModelTypeDec = factory.createTypeAliasDeclaration(
