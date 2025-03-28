@@ -115,7 +115,10 @@ export const generateTypes = (
           }
         }
 
-        // If the field is not required, we need to mark it as `| null`.
+        // We need to mark fields as nullable if they are:
+        // - Not required
+        // - Not a link field
+        // - Not a many-to-many link field
         if (field.required === false && field.type === 'link' && field.kind !== 'many')
           propertyUnionTypes.push(factory.createLiteralTypeNode(factory.createNull()));
 
