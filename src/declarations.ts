@@ -72,7 +72,7 @@ export const importQueryHandlerOptionsType = createImportDeclaration({
  * ```
  */
 export const resolveSchemaType = factory.createTypeAliasDeclaration(
-  [factory.createModifier(SyntaxKind.ExportKeyword)],
+  undefined,
   identifiers.utils.resolveSchema,
   [
     /**
