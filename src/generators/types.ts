@@ -134,7 +134,7 @@ export const generateTypes = (
        * <TUsing extends Array<'foo' | 'bar'> | 'all' = []>
        * ```
        */
-      const foo = factory.createTypeParameterDeclaration(
+      const usingGenericDec = factory.createTypeParameterDeclaration(
         undefined,
         genericIdentifiers.using,
         factory.createUnionTypeNode([
@@ -145,7 +145,7 @@ export const generateTypes = (
         ]),
         factory.createTupleTypeNode([]),
       );
-      modelInterfaceTypeParameters.push(foo);
+      modelInterfaceTypeParameters.push(usingGenericDec);
     }
 
     /**
