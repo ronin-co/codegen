@@ -61,6 +61,7 @@ describe('types', () => {
 
     const PostModel = model({
       slug: 'post',
+      pluralSlug: 'posts',
       fields: {
         title: string(),
         author: link({ target: 'account' }),

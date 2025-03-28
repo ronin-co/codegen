@@ -44,7 +44,7 @@ export type Post<TUsing extends Array<"author"> | "all" = [
     author: ResolveSchema<Account, TUsing, "author">;
     title: string;
 };
-export type <TUsing extends Array<"author"> | "all" = [
+export type Posts<TUsing extends Array<"author"> | "all" = [
 ]> = Array<Post<TUsing>> & {
     moreBefore?: string;
     moreAfter?: string;
