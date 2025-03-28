@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { link, model, string } from 'ronin/schema';
+import { link, model, string } from '@ronin/syntax/schema';
 
 import { generateTypes } from '@/src/generators/types';
 import { printNodes } from '@/src/utils/print';

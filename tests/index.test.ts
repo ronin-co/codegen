@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { model, string } from 'ronin/schema';
+import { model, string } from '@ronin/syntax/schema';
 
 import { generate } from '@/src/index';
 
