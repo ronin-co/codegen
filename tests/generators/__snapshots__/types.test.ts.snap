@@ -1,12 +1,16 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`types a basic model 1`] = `
-"interface AccountSchema extends ResultRecord {
+"export type Account = ResultRecord & {
+    avatar: StoredObject;
     email: string;
+    isActive: boolean;
+    lastActiveAt: Date;
     name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
+    rewardPoints: number;
+    settings: object;
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -17,18 +21,25 @@ exports[`types a model with a summary 1`] = `
 "/**
  * A user account.
  */
-interface AccountSchema extends ResultRecord {
+export type Account = ResultRecord & {
     email: string;
     name: string;
-}
+};
 /**
  * A user account.
  */
-export type Account = AccountSchema;
-/**
- * A user account.
- */
-export type Accounts = Array<AccountSchema> & {
+export type Accounts = Array<Account> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
+"
+`;
+
+exports[`types a model with an invalid field type 1`] = `
+"export type Account = ResultRecord & {
+    name: unknown;
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -36,21 +47,43 @@ export type Accounts = Array<AccountSchema> & {
 `;
 
 exports[`types a model with a link field 1`] = `
-"interface AccountSchema extends ResultRecord {
+"export type Account = ResultRecord & {
     email: string;
     name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };
-interface PostSchema extends ResultRecord {
-    author: AccountSchema | unknown;
+export type Post<TUsing extends Array<"author"> | "all" = [
+]> = ResultRecord & {
+    author: ResolveSchema<Account, TUsing, "author">;
     title: string;
-}
-export type Post = PostSchema;
-export type  = Array<PostSchema> & {
+};
+export type Posts<TUsing extends Array<"author"> | "all" = [
+]> = Array<Post<TUsing>> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
+"
+`;
+
+exports[`types a model with a many-to-many link field 1`] = `
+"export type Account = ResultRecord & {
+    email: string;
+    name: string;
+};
+export type Accounts = Array<Account> & {
+    moreBefore?: string;
+    moreAfter?: string;
+};
+export type Space<TUsing extends Array<"members"> | "all" = [
+]> = ResultRecord & {
+    members: ResolveSchema<Array<Account>, TUsing, "members">;
+    name: string;
+};
+export type Spaces<TUsing extends Array<"members"> | "all" = [
+]> = Array<Space<TUsing>> & {
     moreBefore?: string;
     moreAfter?: string;
 };
@@ -58,13 +91,12 @@ export type  = Array<PostSchema> & {
 `;
 
 exports[`types a model with a link field that does not exist 1`] = `
-"interface AccountSchema extends ResultRecord {
+"export type Account = ResultRecord & {
     email: string;
-    latestPost: unknown | unknown;
+    latestPost: unknown;
     name: string;
-}
-export type Account = AccountSchema;
-export type Accounts = Array<AccountSchema> & {
+};
+export type Accounts = Array<Account> & {
     moreBefore?: string;
     moreAfter?: string;
 };

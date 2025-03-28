@@ -3,6 +3,7 @@ import {
   importRoninQueryTypesType,
   importRoninStoredObjectType,
   importSyntaxUtiltypesType,
+  resolveSchemaType,
 } from '@/src/declarations';
 import { generateModule } from '@/src/generators/module';
 import { generateTypes } from '@/src/generators/types';
@@ -26,6 +27,7 @@ export const generate = (models: Array<Model>): string => {
     importRoninQueryTypesType,
     importSyntaxUtiltypesType,
     importQueryHandlerOptionsType,
+    resolveSchemaType,
   );
 
   // If there is any models that have a `blob()` field, we need to import the

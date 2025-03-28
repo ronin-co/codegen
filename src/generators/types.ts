@@ -1,6 +1,6 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
-import { identifiers } from '@/src/constants/identifiers';
+import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
 import { MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD } from '@/src/constants/schema';
 import { convertToPascalCase } from '@/src/utils/slug';
 
@@ -9,6 +9,7 @@ import type {
   PropertySignature,
   TypeAliasDeclaration,
   TypeNode,
+  TypeParameterDeclaration,
 } from 'typescript';
 
 import type { Model, ModelField } from '@/src/types/model';
@@ -45,9 +46,6 @@ export const generateTypes = (
       .map(([slug, field]) => ({ ...field, slug }) as ModelField)
       .filter((field) => !DEFAULT_FIELD_SLUGS.includes(field.slug));
 
-    const modelIdentifier = factory.createIdentifier(
-      convertToPascalCase(`${model.slug}Schema`),
-    );
     const singularModelIdentifier = factory.createIdentifier(
       convertToPascalCase(model.slug),
     );
@@ -55,29 +53,73 @@ export const generateTypes = (
       convertToPascalCase(model.pluralSlug),
     );
 
+    const hasLinkFields = fields.some(
+      (field) =>
+        field.type === 'link' && models.some((model) => model.slug === field.target),
+    );
     const mappedModelFields = fields
       .sort((a, b) => a.slug.localeCompare(b.slug))
       .map((field) => {
         const propertyUnionTypes = new Array<TypeNode>();
 
-        if (field.type === 'link') {
-          const targetModel = models.find((model) => model.slug === field.target);
-          propertyUnionTypes.push(
-            targetModel
-              ? factory.createTypeReferenceNode(
-                  convertToPascalCase(`${targetModel.slug}Schema`),
-                )
-              : factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-          );
+        switch (field.type) {
+          case 'link': {
+            // Check to make sure the target model exists. If it doesn't we
+            // fall back to using `unknown` as the type.
+            const targetModel = models.find((model) => model.slug === field.target);
+            if (!targetModel) {
+              propertyUnionTypes.push(
+                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+              );
+              break;
+            }
+
+            // If the field is marked as `many` then we need to wrap the
+            // type in an array.
+            const schemaTypeRef = factory.createTypeReferenceNode(
+              convertToPascalCase(targetModel.slug),
+            );
+            const resolvedLinkFieldNode = factory.createTypeReferenceNode(
+              identifiers.utils.resolveSchema,
+              [
+                field.kind === 'many'
+                  ? factory.createTypeReferenceNode(identifiers.primitive.array, [
+                      schemaTypeRef,
+                    ])
+                  : schemaTypeRef,
+
+                factory.createTypeReferenceNode(genericIdentifiers.using),
+
+                factory.createLiteralTypeNode(factory.createStringLiteral(field.slug)),
+              ],
+            );
+
+            propertyUnionTypes.push(resolvedLinkFieldNode);
+            break;
+          }
+          case 'blob':
+          case 'boolean':
+          case 'date':
+          case 'json':
+          case 'number':
+          case 'string': {
+            const primitive = MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type];
+            propertyUnionTypes.push(primitive);
+            break;
+          }
+          default: {
+            propertyUnionTypes.push(
+              factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+            );
+            break;
+          }
         }
 
-        if (Object.keys(MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD).includes(field.type)) {
-          const primitive = MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD[field.type];
-          propertyUnionTypes.push(primitive);
-        }
-
-        // If the field is not required, we need to mark it as `| null`.
-        if (field.required === false)
+        // We need to mark fields as nullable if they are:
+        // - Not required
+        // - Not a link field
+        // - Not a many-to-many link field
+        if (field.required === false && field.type === 'link' && field.kind !== 'many')
           propertyUnionTypes.push(factory.createLiteralTypeNode(factory.createNull()));
 
         return factory.createPropertySignature(
@@ -89,43 +131,61 @@ export const generateTypes = (
       })
       .filter(Boolean) as Array<PropertySignature>;
 
+    const modelInterfaceTypeParameters = new Array<TypeParameterDeclaration>();
+    const linkFieldKeys = fields
+      .filter((field) => field.type === 'link')
+      .map((field) => {
+        const literal = factory.createStringLiteral(field.slug);
+        return factory.createLiteralTypeNode(literal);
+      });
+
     /**
      * ```ts
-     * interface SchemaSlugSchema extends ResultRecord {
-     *    name: string | null;
-     *    email: string;
-     *    // ...
-     * }
+     * <TUsing extends Array<...> | 'all' = []>
      * ```
      */
-    const modelInterfaceDec = factory.createInterfaceDeclaration(
+    const usingGenericDec = factory.createTypeParameterDeclaration(
       undefined,
-      modelIdentifier,
-      [],
-      [
-        // All models should extend the `ResultRecord` interface.
-        factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
-          factory.createExpressionWithTypeArguments(
-            identifiers.syntax.resultRecord,
-            undefined,
-          ),
+      genericIdentifiers.using,
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createUnionTypeNode(linkFieldKeys),
         ]),
-      ],
-      mappedModelFields,
+        factory.createLiteralTypeNode(factory.createStringLiteral('all')),
+      ]),
+      factory.createTupleTypeNode([]),
     );
 
-    const modelSchemaName = factory.createTypeReferenceNode(modelIdentifier, []);
+    if (hasLinkFields) modelInterfaceTypeParameters.push(usingGenericDec);
 
     /**
      * ```ts
-     * export type SchemaSlug = SchemaSlugSchema;
+     * SchemaSlugSchema<TUsing>
+     * ```
+     */
+    const modelSchemaName = factory.createTypeReferenceNode(
+      singularModelIdentifier,
+      hasLinkFields ? [factory.createTypeReferenceNode(genericIdentifiers.using)] : [],
+    );
+
+    /**
+     * ```ts
+     * export type SchemaSlug<TUsing extends Array<...> | 'all' = []> = ResultRecord & {
+     *  // ...
+     * };
      * ```
      */
     const singularModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       singularModelIdentifier,
-      undefined,
-      modelSchemaName,
+      modelInterfaceTypeParameters,
+      factory.createIntersectionTypeNode([
+        factory.createExpressionWithTypeArguments(
+          identifiers.syntax.resultRecord,
+          undefined,
+        ),
+        factory.createTypeLiteralNode(mappedModelFields),
+      ]),
     );
 
     /**
@@ -163,13 +223,16 @@ export const generateTypes = (
 
     /**
      * ```ts
-     * export type SchemaPluralSlug = Array<SchemaSlug>;
+     * export type SchemaPluralSlug<TUsing extends Array<...> | 'all' = []> = Array<SchemaSlug> & {
+     *  moreBefore?: string;
+     *  moreAfter?: string;
+     * };
      * ```
      */
     const pluralModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       pluralSchemaIdentifier,
-      undefined,
+      modelInterfaceTypeParameters,
       factory.createIntersectionTypeNode([
         pluralModelArrayTypeDec,
         pluralModelPaginationPropsTypeDec,
@@ -179,17 +242,11 @@ export const generateTypes = (
     // If the model does not have a summary / description
     // then we can continue to the next iteration & not add any comments.
     if (!model.summary) {
-      nodes.push(modelInterfaceDec, singularModelTypeDec, pluralModelTypeDec);
+      nodes.push(singularModelTypeDec, pluralModelTypeDec);
       continue;
     }
 
     nodes.push(
-      addSyntheticLeadingComment(
-        modelInterfaceDec,
-        SyntaxKind.MultiLineCommentTrivia,
-        `*\n * ${model.summary}\n `,
-        true,
-      ),
       addSyntheticLeadingComment(
         singularModelTypeDec,
         SyntaxKind.MultiLineCommentTrivia,

@@ -242,25 +242,41 @@ exports[`identifiers 1`] = `
       "transformFlags": 0,
     },
   },
+  "utils": {
+    "all": IdentifierObject {
+      "emitNode": undefined,
+      "end": -1,
+      "escapedText": "all",
+      "flags": 16,
+      "flowNode": undefined,
+      "id": 0,
+      "jsDoc": undefined,
+      "kind": 80,
+      "parent": undefined,
+      "pos": -1,
+      "symbol": undefined,
+      "transformFlags": 0,
+    },
+    "resolveSchema": IdentifierObject {
+      "emitNode": undefined,
+      "end": -1,
+      "escapedText": "ResolveSchema",
+      "flags": 16,
+      "flowNode": undefined,
+      "id": 0,
+      "jsDoc": undefined,
+      "kind": 80,
+      "parent": undefined,
+      "pos": -1,
+      "symbol": undefined,
+      "transformFlags": 0,
+    },
+  },
 }
 `;
 
 exports[`generic identifiers 1`] = `
 {
-  "including": IdentifierObject {
-    "emitNode": undefined,
-    "end": -1,
-    "escapedText": "TIncluding",
-    "flags": 16,
-    "flowNode": undefined,
-    "id": 0,
-    "jsDoc": undefined,
-    "kind": 80,
-    "parent": undefined,
-    "pos": -1,
-    "symbol": undefined,
-    "transformFlags": 0,
-  },
   "key": IdentifierObject {
     "emitNode": undefined,
     "end": -1,
@@ -289,10 +305,10 @@ exports[`generic identifiers 1`] = `
     "symbol": undefined,
     "transformFlags": 0,
   },
-  "slug": IdentifierObject {
+  "using": IdentifierObject {
     "emitNode": undefined,
     "end": -1,
-    "escapedText": "TSlug",
+    "escapedText": "TUsing",
     "flags": 16,
     "flowNode": undefined,
     "id": 0,

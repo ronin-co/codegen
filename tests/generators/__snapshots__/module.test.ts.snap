@@ -2,12 +2,11 @@
 
 exports[`module a basic model 1`] = `
 "declare module "ronin" {
-    interface AccountSchema extends ResultRecord {
+    export type Account = ResultRecord & {
         email: string;
         name: string;
-    }
-    export type Account = AccountSchema;
-    export type Accounts = Array<AccountSchema> & {
+    };
+    export type Accounts = Array<Account> & {
         moreBefore?: string;
         moreAfter?: string;
     };
@@ -84,21 +83,19 @@ exports[`module with no modules 1`] = `
 
 exports[`module with multiple models 1`] = `
 "declare module "ronin" {
-    interface AccountSchema extends ResultRecord {
+    export type Account = ResultRecord & {
         email: string;
         name: string;
-    }
-    export type Account = AccountSchema;
-    export type Accounts = Array<AccountSchema> & {
+    };
+    export type Accounts = Array<Account> & {
         moreBefore?: string;
         moreAfter?: string;
     };
-    interface PostSchema extends ResultRecord {
+    export type Post = ResultRecord & {
         description: string;
         title: string;
-    }
-    export type Post = PostSchema;
-    export type Posts = Array<PostSchema> & {
+    };
+    export type Posts = Array<Post> & {
         moreBefore?: string;
         moreAfter?: string;
     };
