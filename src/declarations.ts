@@ -1,4 +1,6 @@
-import { identifiers } from '@/src/constants/identifiers';
+import { SyntaxKind, factory } from 'typescript';
+
+import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
 import { createImportDeclaration } from '@/src/generators/import';
 
 /**
@@ -53,3 +55,89 @@ export const importQueryHandlerOptionsType = createImportDeclaration({
   module: identifiers.ronin.module.types,
   type: true,
 });
+
+/**
+ * ```ts
+ * type ResolveSchema<
+ *  TSchema,
+ *  TUsing extends Array<string> | 'all',
+ *  TKey extends string
+ * > = TUsing extends 'all'
+ *  ? TSchema
+ *  : TKey extends TUsing[number]
+ *    ? TSchema
+ *    : TSchema extends Array<any>
+ *      ? Array<string>
+ *      : string;
+ * ```
+ */
+export const resolveSchemaType = factory.createTypeAliasDeclaration(
+  [factory.createModifier(SyntaxKind.ExportKeyword)],
+  identifiers.utils.resolveSchema,
+  [
+    /**
+     * ```ts
+     * TSchema
+     * ```
+     */
+    factory.createTypeParameterDeclaration(undefined, genericIdentifiers.schema),
+
+    /**
+     * ```ts
+     * TUsing extends Array<string> | 'all'
+     * ```
+     */
+    factory.createTypeParameterDeclaration(
+      undefined,
+      genericIdentifiers.using,
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createUnionTypeNode([
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+          ]),
+        ]),
+        factory.createLiteralTypeNode(
+          factory.createStringLiteral(identifiers.utils.all.text),
+        ),
+      ]),
+    ),
+
+    /**
+     * ```ts
+     * TKey extends string
+     * ```
+     */
+    factory.createTypeParameterDeclaration(
+      undefined,
+      genericIdentifiers.key,
+      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    ),
+  ],
+  factory.createConditionalTypeNode(
+    factory.createTypeReferenceNode(genericIdentifiers.using),
+    factory.createLiteralTypeNode(
+      factory.createStringLiteral(identifiers.utils.all.text),
+    ),
+    factory.createTypeReferenceNode(genericIdentifiers.schema),
+
+    factory.createConditionalTypeNode(
+      factory.createTypeReferenceNode(genericIdentifiers.key),
+      factory.createIndexedAccessTypeNode(
+        factory.createTypeReferenceNode(genericIdentifiers.using),
+        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+      ),
+      factory.createTypeReferenceNode(genericIdentifiers.schema),
+
+      factory.createConditionalTypeNode(
+        factory.createTypeReferenceNode(genericIdentifiers.schema),
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+        ]),
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        ]),
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ),
+    ),
+  ),
+);

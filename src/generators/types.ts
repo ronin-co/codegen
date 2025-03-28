@@ -79,14 +79,22 @@ export const generateTypes = (
             const schemaTypeRef = factory.createTypeReferenceNode(
               convertToPascalCase(`${targetModel.slug}Schema`),
             );
-            propertyUnionTypes.push(
-              field.kind === 'many'
-                ? factory.createTypeReferenceNode(identifiers.primitive.array, [
-                    schemaTypeRef,
-                  ])
-                : schemaTypeRef,
+            const resolvedLinkFieldNode = factory.createTypeReferenceNode(
+              identifiers.utils.resolveSchema,
+              [
+                field.kind === 'many'
+                  ? factory.createTypeReferenceNode(identifiers.primitive.array, [
+                      schemaTypeRef,
+                    ])
+                  : schemaTypeRef,
+
+                factory.createTypeReferenceNode(genericIdentifiers.using),
+
+                factory.createLiteralTypeNode(factory.createStringLiteral(field.slug)),
+              ],
             );
 
+            propertyUnionTypes.push(resolvedLinkFieldNode);
             break;
           }
           case 'blob':
@@ -108,7 +116,7 @@ export const generateTypes = (
         }
 
         // If the field is not required, we need to mark it as `| null`.
-        if (field.required === false)
+        if (field.required === false && field.type === 'link' && field.kind !== 'many')
           propertyUnionTypes.push(factory.createLiteralTypeNode(factory.createNull()));
 
         return factory.createPropertySignature(
@@ -121,32 +129,31 @@ export const generateTypes = (
       .filter(Boolean) as Array<PropertySignature>;
 
     const modelInterfaceTypeParameters = new Array<TypeParameterDeclaration>();
-    if (hasLinkFields) {
-      const linkFieldKeys = fields
-        .filter((field) => field.type === 'link')
-        .map((field) => {
-          const literal = factory.createStringLiteral(field.slug);
-          return factory.createLiteralTypeNode(literal);
-        });
+    const linkFieldKeys = fields
+      .filter((field) => field.type === 'link')
+      .map((field) => {
+        const literal = factory.createStringLiteral(field.slug);
+        return factory.createLiteralTypeNode(literal);
+      });
 
-      /**
-       * ```ts
-       * <TUsing extends Array<'foo' | 'bar'> | 'all' = []>
-       * ```
-       */
-      const usingGenericDec = factory.createTypeParameterDeclaration(
-        undefined,
-        genericIdentifiers.using,
-        factory.createUnionTypeNode([
-          factory.createTypeReferenceNode(identifiers.primitive.array, [
-            factory.createUnionTypeNode(linkFieldKeys),
-          ]),
-          factory.createLiteralTypeNode(factory.createStringLiteral('all')),
+    /**
+     * ```ts
+     * <TUsing extends Array<'foo' | 'bar'> | 'all' = []>
+     * ```
+     */
+    const usingGenericDec = factory.createTypeParameterDeclaration(
+      undefined,
+      genericIdentifiers.using,
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createUnionTypeNode(linkFieldKeys),
         ]),
-        factory.createTupleTypeNode([]),
-      );
-      modelInterfaceTypeParameters.push(usingGenericDec);
-    }
+        factory.createLiteralTypeNode(factory.createStringLiteral('all')),
+      ]),
+      factory.createTupleTypeNode([]),
+    );
+
+    if (hasLinkFields) modelInterfaceTypeParameters.push(usingGenericDec);
 
     /**
      * ```ts
@@ -173,7 +180,14 @@ export const generateTypes = (
       mappedModelFields,
     );
 
-    const modelSchemaName = factory.createTypeReferenceNode(modelIdentifier, []);
+    /**
+     * ```ts
+     * SchemaSlugSchema<TUsing>
+     * ```
+     */
+    const modelSchemaName = factory.createTypeReferenceNode(modelIdentifier, [
+      factory.createTypeReferenceNode(genericIdentifiers.using),
+    ]);
 
     /**
      * ```ts
@@ -183,7 +197,7 @@ export const generateTypes = (
     const singularModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       singularModelIdentifier,
-      [],
+      modelInterfaceTypeParameters,
       modelSchemaName,
     );
 
@@ -228,7 +242,7 @@ export const generateTypes = (
     const pluralModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       pluralSchemaIdentifier,
-      [],
+      modelInterfaceTypeParameters,
       factory.createIntersectionTypeNode([
         pluralModelArrayTypeDec,
         pluralModelPaginationPropsTypeDec,

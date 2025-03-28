@@ -42,6 +42,10 @@ export const identifiers = {
     },
     resultRecord: factory.createIdentifier('ResultRecord'),
   },
+  utils: {
+    all: factory.createIdentifier('all'),
+    resolveSchema: factory.createIdentifier('ResolveSchema'),
+  },
 } satisfies Record<string, Record<string, Identifier | Record<string, Identifier>>>;
 
 /**
@@ -50,5 +54,7 @@ export const identifiers = {
  * Similar to `identifiers` but designed specifically for use as generic names.
  */
 export const genericIdentifiers = {
+  key: factory.createIdentifier('TKey'),
+  schema: factory.createIdentifier('TSchema'),
   using: factory.createIdentifier('TUsing'),
 } satisfies Record<string, Identifier>;
