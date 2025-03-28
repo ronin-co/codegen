@@ -19,10 +19,8 @@ declare module "ronin" {
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
     };
     declare const count: {
-        /* Count a single account record */
-        account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
         /* Count multiple account records */
-        accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
     };
     declare const get: {
         /* Get a single account record */

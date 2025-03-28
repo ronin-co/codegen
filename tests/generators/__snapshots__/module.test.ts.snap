@@ -15,10 +15,8 @@ exports[`module a basic model 1`] = `
         account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
     };
     declare const count: {
-        /* Count a single account record */
-        account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
         /* Count multiple account records */
-        accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
+        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
     };
     declare const get: {
         /* Get a single account record */
@@ -106,14 +104,10 @@ exports[`module with multiple models 1`] = `
         post: DeepCallable<AddQuery[keyof AddQuery], Post | null>;
     };
     declare const count: {
-        /* Count a single account record */
-        account: DeepCallable<CountQuery[keyof CountQuery], Account | null>;
         /* Count multiple account records */
-        accounts: DeepCallable<CountQuery[keyof CountQuery], Accounts>;
-        /* Count a single post record */
-        post: DeepCallable<CountQuery[keyof CountQuery], Post | null>;
+        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
         /* Count multiple post records */
-        posts: DeepCallable<CountQuery[keyof CountQuery], Posts>;
+        posts: DeepCallable<CountQuery[keyof CountQuery], number>;
     };
     declare const get: {
         /* Get a single account record */
