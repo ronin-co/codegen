@@ -56,7 +56,10 @@ export const generateTypes = (
       convertToPascalCase(model.pluralSlug),
     );
 
-    const hasLinkFields = fields.some((field) => field.type === 'link');
+    const hasLinkFields = fields.some(
+      (field) =>
+        field.type === 'link' && models.some((model) => model.slug === field.target),
+    );
     const mappedModelFields = fields
       .sort((a, b) => a.slug.localeCompare(b.slug))
       .map((field) => {
