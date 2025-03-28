@@ -1,6 +1,6 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
-import { identifiers } from '@/src/constants/identifiers';
+import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
 import { MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD } from '@/src/constants/schema';
 import { convertToPascalCase } from '@/src/utils/slug';
 
@@ -9,6 +9,7 @@ import type {
   PropertySignature,
   TypeAliasDeclaration,
   TypeNode,
+  TypeParameterDeclaration,
 } from 'typescript';
 
 import type { Model, ModelField } from '@/src/types/model';
@@ -117,6 +118,34 @@ export const generateTypes = (
       })
       .filter(Boolean) as Array<PropertySignature>;
 
+    const modelInterfaceTypeParameters = new Array<TypeParameterDeclaration>();
+    if (hasLinkFields) {
+      const linkFieldKeys = fields
+        .filter((field) => field.type === 'link')
+        .map((field) => {
+          const literal = factory.createStringLiteral(field.slug);
+          return factory.createLiteralTypeNode(literal);
+        });
+
+      /**
+       * ```ts
+       * <TUsing extends Array<'foo' | 'bar'> | 'all' = []>
+       * ```
+       */
+      const foo = factory.createTypeParameterDeclaration(
+        undefined,
+        genericIdentifiers.using,
+        factory.createUnionTypeNode([
+          factory.createTypeReferenceNode(identifiers.primitive.array, [
+            factory.createUnionTypeNode(linkFieldKeys),
+          ]),
+          factory.createLiteralTypeNode(factory.createStringLiteral('all')),
+        ]),
+        factory.createTupleTypeNode([]),
+      );
+      modelInterfaceTypeParameters.push(foo);
+    }
+
     /**
      * ```ts
      * interface SchemaSlugSchema extends ResultRecord {
@@ -129,7 +158,7 @@ export const generateTypes = (
     const modelInterfaceDec = factory.createInterfaceDeclaration(
       undefined,
       modelIdentifier,
-      [],
+      modelInterfaceTypeParameters,
       [
         // All models should extend the `ResultRecord` interface.
         factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
@@ -152,7 +181,7 @@ export const generateTypes = (
     const singularModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       singularModelIdentifier,
-      undefined,
+      [],
       modelSchemaName,
     );
 
@@ -197,7 +226,7 @@ export const generateTypes = (
     const pluralModelTypeDec = factory.createTypeAliasDeclaration(
       [factory.createModifier(SyntaxKind.ExportKeyword)],
       pluralSchemaIdentifier,
-      undefined,
+      [],
       factory.createIntersectionTypeNode([
         pluralModelArrayTypeDec,
         pluralModelPaginationPropsTypeDec,
