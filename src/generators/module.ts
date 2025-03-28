@@ -85,14 +85,18 @@ export const generateModule = (
           ),
         ]),
       );
-      declarationProperties.push(
-        addSyntheticLeadingComment(
-          singularProperty,
-          SyntaxKind.MultiLineCommentTrivia,
-          comment.singular,
-          true,
-        ),
-      );
+
+      // There is no value in supporting `count` queries for singular
+      // records, so we skip adding the comment for those.
+      if (queryType !== 'count')
+        declarationProperties.push(
+          addSyntheticLeadingComment(
+            singularProperty,
+            SyntaxKind.MultiLineCommentTrivia,
+            comment.singular,
+            true,
+          ),
+        );
 
       // TODO(@nurodev): Remove once RONIN officially supports
       // creating multiple records at once.
