@@ -75,10 +75,14 @@ export const generateModule = (
         undefined,
         factory.createTypeReferenceNode(identifiers.syntax.deepCallable, [
           queryTypeValue,
-          factory.createUnionTypeNode([
-            singularModelIdentifier,
-            factory.createLiteralTypeNode(factory.createNull()),
-          ]),
+          factory.createUnionTypeNode(
+            queryType === 'count'
+              ? [factory.createKeywordTypeNode(SyntaxKind.NumberKeyword)]
+              : [
+                  singularModelIdentifier,
+                  factory.createLiteralTypeNode(factory.createNull()),
+                ],
+          ),
         ]),
       );
       declarationProperties.push(
@@ -105,7 +109,9 @@ export const generateModule = (
         undefined,
         factory.createTypeReferenceNode(identifiers.syntax.deepCallable, [
           queryTypeValue,
-          pluralSchemaIdentifier,
+          queryType === 'count'
+            ? factory.createKeywordTypeNode(SyntaxKind.NumberKeyword)
+            : pluralSchemaIdentifier,
         ]),
       );
       declarationProperties.push(
