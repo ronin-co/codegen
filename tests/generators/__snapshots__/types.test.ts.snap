@@ -2,8 +2,13 @@
 
 exports[`types a basic model 1`] = `
 "export type Account = ResultRecord & {
+    avatar: StoredObject;
     email: string;
+    isActive: boolean;
+    lastActiveAt: Date;
     name: string;
+    rewardPoints: number;
+    settings: object;
 };
 export type Accounts = Array<Account> & {
     moreBefore?: string;

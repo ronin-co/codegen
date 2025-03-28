@@ -1,5 +1,14 @@
 import { describe, expect, test } from 'bun:test';
-import { link, model, string } from '@ronin/syntax/schema';
+import {
+  blob,
+  boolean,
+  date,
+  json,
+  link,
+  model,
+  number,
+  string,
+} from '@ronin/syntax/schema';
 
 import { generateTypes } from '@/src/generators/types';
 import { printNodes } from '@/src/utils/print';
@@ -10,8 +19,13 @@ describe('types', () => {
       slug: 'account',
       pluralSlug: 'accounts',
       fields: {
-        name: string(),
+        avatar: blob(),
         email: string({ required: true }),
+        isActive: boolean(),
+        lastActiveAt: date(),
+        name: string(),
+        rewardPoints: number({ defaultValue: 0, required: true }),
+        settings: json({ defaultValue: {}, required: true }),
       },
     });
 
