@@ -8,7 +8,7 @@ exports[`types a basic model 1`] = `
     lastActiveAt: Date;
     name: string;
     rewardPoints: number;
-    settings: object;
+    settings: (JsonObject | JsonArray);
 };
 export type Accounts = Array<Account> & {
     moreBefore?: string;

@@ -141,3 +141,68 @@ export const resolveSchemaType = factory.createTypeAliasDeclaration(
     ),
   ),
 );
+
+/**
+ * ```ts
+ * type JsonPrimitive = string | number | boolean | null;
+ * ```
+ */
+export const jsonPrimitiveType = factory.createTypeAliasDeclaration(
+  undefined,
+  identifiers.utils.jsonPrimitive,
+  undefined,
+  factory.createUnionTypeNode([
+    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+    factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+    factory.createLiteralTypeNode(factory.createNull()),
+  ]),
+);
+
+/**
+ * ```ts
+ * type JsonObject = { [key: string]: JsonPrimitive | JsonObject | JsonArray };
+ * ```
+ */
+export const jsonObjectType = factory.createTypeAliasDeclaration(
+  undefined,
+  identifiers.utils.jsonObject,
+  undefined,
+  factory.createTypeLiteralNode([
+    factory.createIndexSignature(
+      undefined,
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          factory.createIdentifier('key'),
+          undefined,
+          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        ),
+      ],
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(identifiers.utils.jsonPrimitive),
+        factory.createTypeReferenceNode(identifiers.utils.jsonObject),
+        factory.createTypeReferenceNode(identifiers.utils.jsonArray),
+      ]),
+    ),
+  ]),
+);
+
+/**
+ * ```ts
+ * type JsonArray = Array<JsonPrimitive | JsonObject | JsonArray>;
+ * ```
+ */
+export const jsonArrayType = factory.createTypeAliasDeclaration(
+  undefined,
+  identifiers.utils.jsonArray,
+  undefined,
+  factory.createTypeReferenceNode(identifiers.primitive.array, [
+    factory.createUnionTypeNode([
+      factory.createTypeReferenceNode(identifiers.utils.jsonPrimitive),
+      factory.createTypeReferenceNode(identifiers.utils.jsonObject),
+      factory.createTypeReferenceNode(identifiers.utils.jsonArray),
+    ]),
+  ]),
+);
