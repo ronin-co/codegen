@@ -13,7 +13,10 @@ export const MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD = {
   blob: factory.createTypeReferenceNode(identifiers.compiler.storedObject),
   boolean: factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
   date: factory.createTypeReferenceNode(identifiers.primitive.date),
-  json: factory.createKeywordTypeNode(SyntaxKind.ObjectKeyword),
+  json: factory.createUnionTypeNode([
+    factory.createTypeReferenceNode(identifiers.utils.jsonObject),
+    factory.createTypeReferenceNode(identifiers.utils.jsonArray),
+  ]),
   link: factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
   number: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   string: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
