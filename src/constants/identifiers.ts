@@ -44,6 +44,9 @@ export const identifiers = {
   },
   utils: {
     all: factory.createIdentifier('all'),
+    jsonArray: factory.createIdentifier('JsonArray'),
+    jsonObject: factory.createIdentifier('JsonObject'),
+    jsonPrimitive: factory.createIdentifier('JsonPrimitive'),
     resolveSchema: factory.createIdentifier('ResolveSchema'),
   },
 } satisfies Record<string, Record<string, Identifier | Record<string, Identifier>>>;
