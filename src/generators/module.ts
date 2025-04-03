@@ -238,17 +238,24 @@ export const generateModule = (
    *  get: typeof get,
    *  remove: typeof remove,
    *  set: typeof set,
+   *  alter: typeof alter,
+   *  batch: typeof batch,
+   *  create: typeof create,
+   *  drop: typeof drop,
+   *  sql: typeof sql,
+   *  sqlBatch: typeof sqlBatch,
    * }
    * ```
    */
   const csfReturnTypeDec = factory.createTypeLiteralNode(
-    QUERY_TYPE_NAMES.map((queryType) =>
-      factory.createPropertySignature(
-        undefined,
-        factory.createIdentifier(queryType),
-        undefined,
-        factory.createTypeQueryNode(factory.createIdentifier(queryType)),
-      ),
+    [...QUERY_TYPE_NAMES, 'alter', 'batch', 'create', 'drop', 'sql', 'sqlBatch'].map(
+      (queryType) =>
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(queryType),
+          undefined,
+          factory.createTypeQueryNode(factory.createIdentifier(queryType)),
+        ),
     ),
   );
 
