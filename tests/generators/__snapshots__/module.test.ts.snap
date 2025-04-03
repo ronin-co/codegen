@@ -23,6 +23,8 @@ exports[`module a basic model 1`] = `
         account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
         /* Get multiple account records */
         accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+        /* Get all current models */
+        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
     declare const remove: {
         /* Remove a single account record */
@@ -42,6 +44,12 @@ exports[`module a basic model 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -49,6 +57,12 @@ exports[`module a basic model 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "
@@ -58,7 +72,10 @@ exports[`module with no modules 1`] = `
 "declare module "ronin" {
     declare const add: {};
     declare const count: {};
-    declare const get: {};
+    declare const get: {
+        /* Get all current models */
+        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
+    };
     declare const remove: {};
     declare const set: {};
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
@@ -67,6 +84,12 @@ exports[`module with no modules 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -74,6 +97,12 @@ exports[`module with no modules 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "
@@ -118,6 +147,8 @@ exports[`module with multiple models 1`] = `
         post: DeepCallable<GetQuery[keyof GetQuery], Post | null>;
         /* Get multiple post records */
         posts: DeepCallable<GetQuery[keyof GetQuery], Posts>;
+        /* Get all current models */
+        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
     declare const remove: {
         /* Remove a single account record */
@@ -145,6 +176,12 @@ exports[`module with multiple models 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -152,6 +189,12 @@ exports[`module with multiple models 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "

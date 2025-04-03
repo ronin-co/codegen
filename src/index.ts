@@ -30,18 +30,25 @@ export const generate = (models: Array<Model>): string => {
     importRoninQueryTypesType,
     importSyntaxUtiltypesType,
     importQueryHandlerOptionsType,
-    resolveSchemaType,
-    jsonArrayType,
-    jsonObjectType,
-    jsonPrimitiveType,
   );
 
-  // If there is any models that have a `blob()` field, we need to import the
-  // `StoredObject` type from the `@ronin/compiler` package.
-  const hasStoredObjectField = models.some((model) =>
-    Object.values(model.fields).some((field) => field.type === 'blob'),
-  );
-  if (hasStoredObjectField) nodes.push(importRoninStoredObjectType);
+  // Some types or imports are only needed if certain field types are provided.
+  for (const model of models) {
+    const hasStoredObjectFields = Object.values(model.fields).some(
+      (field) => field.type === 'blob',
+    );
+    if (hasStoredObjectFields) nodes.push(importRoninStoredObjectType);
+
+    const hasLinkFields = Object.values(model.fields).some(
+      (field) => field.type === 'link',
+    );
+    if (hasLinkFields) nodes.push(resolveSchemaType);
+
+    const hasJsonFields = Object.values(model.fields).some(
+      (field) => field.type === 'json',
+    );
+    if (hasJsonFields) nodes.push(jsonArrayType, jsonObjectType, jsonPrimitiveType);
+  }
 
   // Generate and add the type declarations for each model.
   const typeDeclarations = generateTypes(models);
