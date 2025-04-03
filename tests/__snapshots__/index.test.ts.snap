@@ -47,6 +47,12 @@ declare module "ronin" {
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -54,6 +60,12 @@ declare module "ronin" {
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "
@@ -78,6 +90,12 @@ declare module "ronin" {
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -85,6 +103,12 @@ declare module "ronin" {
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "

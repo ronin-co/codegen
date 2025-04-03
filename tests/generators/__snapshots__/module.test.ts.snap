@@ -44,6 +44,12 @@ exports[`module a basic model 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -51,6 +57,12 @@ exports[`module a basic model 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "
@@ -72,6 +84,12 @@ exports[`module with no modules 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -79,6 +97,12 @@ exports[`module with no modules 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "
@@ -152,6 +176,12 @@ exports[`module with multiple models 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         add: typeof add;
@@ -159,6 +189,12 @@ exports[`module with multiple models 1`] = `
         get: typeof get;
         remove: typeof remove;
         set: typeof set;
+        alter: typeof alter;
+        batch: typeof batch;
+        create: typeof create;
+        drop: typeof drop;
+        sql: typeof sql;
+        sqlBatch: typeof sqlBatch;
     };
 }
 "
