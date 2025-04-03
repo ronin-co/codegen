@@ -32,7 +32,7 @@ export const generate = (models: Array<Model>): string => {
     importQueryHandlerOptionsType,
   );
 
-  // Some types or imports are only needed if certain field types are provided
+  // Some types or imports are only needed if certain field types are provided.
   for (const model of models) {
     const hasStoredObjectFields = Object.values(model.fields).some(
       (field) => field.type === 'blob',
