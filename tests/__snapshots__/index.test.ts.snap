@@ -4,12 +4,6 @@ exports[`generate a basic model 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
-type ResolveSchema<TSchema, TUsing extends Array<string> | "all", TKey extends string> = TUsing extends "all" ? TSchema : TKey extends TUsing[number] ? TSchema : TSchema extends Array<unknown> ? Array<string> : string;
-type JsonArray = Array<JsonPrimitive | JsonObject | JsonArray>;
-type JsonObject = {
-    [key: string]: JsonPrimitive | JsonObject | JsonArray;
-};
-type JsonPrimitive = string | number | boolean | null;
 declare module "ronin" {
     export type Account = ResultRecord & {
         email: string;
@@ -32,6 +26,8 @@ declare module "ronin" {
         account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
         /* Get multiple account records */
         accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
+        /* Get all current models */
+        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
     declare const remove: {
         /* Remove a single account record */
@@ -67,16 +63,13 @@ exports[`generate with no models 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
-type ResolveSchema<TSchema, TUsing extends Array<string> | "all", TKey extends string> = TUsing extends "all" ? TSchema : TKey extends TUsing[number] ? TSchema : TSchema extends Array<unknown> ? Array<string> : string;
-type JsonArray = Array<JsonPrimitive | JsonObject | JsonArray>;
-type JsonObject = {
-    [key: string]: JsonPrimitive | JsonObject | JsonArray;
-};
-type JsonPrimitive = string | number | boolean | null;
 declare module "ronin" {
     declare const add: {};
     declare const count: {};
-    declare const get: {};
+    declare const get: {
+        /* Get all current models */
+        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
+    };
     declare const remove: {};
     declare const set: {};
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {

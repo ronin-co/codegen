@@ -54,7 +54,6 @@ export const generateModule = (
        */
       const queryTypeValue = factory.createIndexedAccessTypeNode(
         factory.createTypeReferenceNode(
-          // identifiers.compiler.queryType[queryType],
           identifiers.compiler.queryType[queryType],
           undefined,
         ),
@@ -123,6 +122,54 @@ export const generateModule = (
           pluralProperty,
           SyntaxKind.MultiLineCommentTrivia,
           comment.plural,
+          true,
+        ),
+      );
+    }
+
+    // Make sure to always add `get.models()` to the `get` query type
+    // declaration, even if there are no models defined.
+    if (queryType === 'get') {
+      const model = {
+        pluralSlug: 'models',
+      } as Model;
+
+      /**
+       * ```ts
+       * GetQuery[keyof GetQuery]
+       * ```
+       */
+      const queryTypeValue = factory.createIndexedAccessTypeNode(
+        factory.createTypeReferenceNode(
+          identifiers.compiler.queryType[queryType],
+          undefined,
+        ),
+        factory.createTypeOperatorNode(
+          SyntaxKind.KeyOfKeyword,
+          factory.createTypeReferenceNode(identifiers.compiler.queryType[queryType]),
+        ),
+      );
+
+      /**
+       * ```ts
+       * models: DeepCallable<GetQuery[keyof GetQuery], Array<Models>>;
+       * ```
+       */
+      const property = factory.createPropertySignature(
+        undefined,
+        model.pluralSlug,
+        undefined,
+        factory.createTypeReferenceNode(identifiers.syntax.deepCallable, [
+          queryTypeValue,
+          factory.createTypeReferenceNode(convertToPascalCase(model.pluralSlug)),
+        ]),
+      );
+
+      declarationProperties.push(
+        addSyntheticLeadingComment(
+          property,
+          SyntaxKind.MultiLineCommentTrivia,
+          ' Get all current models ',
           true,
         ),
       );
