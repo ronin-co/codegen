@@ -32,23 +32,24 @@ export const generate = (models: Array<Model>): string => {
     importQueryHandlerOptionsType,
   );
 
-  // Some types or imports are only needed if certain field types are provided.
-  for (const model of models) {
-    const hasStoredObjectFields = Object.values(model.fields).some(
-      (field) => field.type === 'blob',
-    );
-    if (hasStoredObjectFields) nodes.push(importRoninStoredObjectType);
+  // If there is any models that have a `blob()` field, we need to import the
+  // `StoredObject` type from the `@ronin/compiler` package.
+  const hasStoredObjectFields = models.some((model) =>
+    Object.values(model.fields).some((field) => field.type === 'blob'),
+  );
+  if (hasStoredObjectFields) nodes.push(importRoninStoredObjectType);
 
-    const hasLinkFields = Object.values(model.fields).some(
-      (field) => field.type === 'link',
-    );
-    if (hasLinkFields) nodes.push(resolveSchemaType);
+  // If there is any models that have a `link()` field, we need to add the
+  // `ResolveSchemaType` type.
+  const hasLinkFields = models.some((model) =>
+    Object.values(model.fields).some((field) => field.type === 'link'),
+  );
+  if (hasLinkFields) nodes.push(resolveSchemaType);
 
-    const hasJsonFields = Object.values(model.fields).some(
-      (field) => field.type === 'json',
-    );
-    if (hasJsonFields) nodes.push(jsonArrayType, jsonObjectType, jsonPrimitiveType);
-  }
+  const hasJsonFields = models.some((model) =>
+    Object.values(model.fields).some((field) => field.type === 'json'),
+  );
+  if (hasJsonFields) nodes.push(jsonArrayType, jsonObjectType, jsonPrimitiveType);
 
   // Generate and add the type declarations for each model.
   const typeDeclarations = generateTypes(models);
