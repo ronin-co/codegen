@@ -193,7 +193,7 @@ export const generateModule = (
 
   /**
    * ```ts
-   * declare const add: { ... };
+   * declare const list: { ... };
    * ```
    */
   const listModelsQueryDeclaration = factory.createVariableStatement(
