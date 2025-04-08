@@ -38,7 +38,7 @@ exports[`module a basic model 1`] = `
     };
     declare const list: {
         /* List all model definitions */
-        models: DeepCallable<ListQuery[keyof ListQuery], Models>;
+        models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
     };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
         get: typeof get;
@@ -81,7 +81,7 @@ exports[`module with no modules 1`] = `
     declare const remove: {};
     declare const list: {
         /* List all model definitions */
-        models: DeepCallable<ListQuery[keyof ListQuery], Models>;
+        models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
     };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
         get: typeof get;
@@ -177,7 +177,7 @@ exports[`module with multiple models 1`] = `
     };
     declare const list: {
         /* List all model definitions */
-        models: DeepCallable<ListQuery[keyof ListQuery], Models>;
+        models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
     };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
         get: typeof get;

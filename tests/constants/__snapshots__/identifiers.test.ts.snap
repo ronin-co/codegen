@@ -91,6 +91,20 @@ exports[`identifiers 1`] = `
         "transformFlags": 0,
       },
     },
+    "model": IdentifierObject {
+      "emitNode": undefined,
+      "end": -1,
+      "escapedText": "Model",
+      "flags": 16,
+      "flowNode": undefined,
+      "id": 0,
+      "jsDoc": undefined,
+      "kind": 80,
+      "parent": undefined,
+      "pos": -1,
+      "symbol": undefined,
+      "transformFlags": 0,
+    },
     "module": {
       "root": IdentifierObject {
         "emitNode": undefined,

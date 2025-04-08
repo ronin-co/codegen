@@ -5,7 +5,7 @@ import { createImportDeclaration } from '@/src/generators/import';
 
 /**
  * ```ts
- * import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+ * import type { AddQuery, CountQuery, GetQuery, ListQuery, Model, RemoveQuery, SetQuery } from "@ronin/compiler";
  * ```
  */
 export const importRoninQueryTypesType = createImportDeclaration({
@@ -14,6 +14,7 @@ export const importRoninQueryTypesType = createImportDeclaration({
     { name: identifiers.compiler.dmlQueryType.count },
     { name: identifiers.compiler.dmlQueryType.get },
     { name: identifiers.compiler.ddlQueryType.list },
+    { name: identifiers.compiler.model },
     { name: identifiers.compiler.dmlQueryType.remove },
     { name: identifiers.compiler.dmlQueryType.set },
   ],

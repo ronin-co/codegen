@@ -162,7 +162,7 @@ export const generateModule = (
 
   /**
    * ```ts
-   * models: DeepCallable<ListQuery[keyof ListQuery], Array<Models>>;
+   * models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
    * ```
    */
   const listModelsQueryPropertyDeclaration = addSyntheticLeadingComment(
@@ -181,7 +181,9 @@ export const generateModule = (
             factory.createTypeReferenceNode(identifiers.compiler.ddlQueryType.list),
           ),
         ),
-        factory.createTypeReferenceNode('Models'),
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createTypeReferenceNode(identifiers.compiler.model),
+        ]),
       ]),
     ),
     SyntaxKind.MultiLineCommentTrivia,

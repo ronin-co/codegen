@@ -21,6 +21,7 @@ export const identifiers = {
       remove: factory.createIdentifier('RemoveQuery'),
       set: factory.createIdentifier('SetQuery'),
     },
+    model: factory.createIdentifier('Model'),
     module: {
       root: factory.createIdentifier(JSON.stringify('@ronin/compiler')),
     },
