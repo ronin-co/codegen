@@ -13,14 +13,6 @@ declare module "ronin" {
         moreBefore?: string;
         moreAfter?: string;
     };
-    declare const add: {
-        /* Add a single account record */
-        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
-    };
-    declare const count: {
-        /* Count multiple account records */
-        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
-    };
     declare const get: {
         /* Get a single account record */
         account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
@@ -29,11 +21,9 @@ declare module "ronin" {
         /* Get all current models */
         models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
-    declare const remove: {
-        /* Remove a single account record */
-        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
-        /* Remove multiple account records */
-        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    declare const count: {
+        /* Count multiple account records */
+        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
     };
     declare const set: {
         /* Set a single account record */
@@ -41,29 +31,39 @@ declare module "ronin" {
         /* Set multiple account records */
         accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
     };
+    declare const add: {
+        /* Add a single account record */
+        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+    };
+    declare const remove: {
+        /* Remove a single account record */
+        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+        /* Remove multiple account records */
+        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
@@ -76,37 +76,37 @@ exports[`generate with no models 1`] = `
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
 declare module "ronin" {
-    declare const add: {};
-    declare const count: {};
     declare const get: {
         /* Get all current models */
         models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
-    declare const remove: {};
+    declare const count: {};
     declare const set: {};
+    declare const add: {};
+    declare const remove: {};
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };

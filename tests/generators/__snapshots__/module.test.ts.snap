@@ -10,14 +10,6 @@ exports[`module a basic model 1`] = `
         moreBefore?: string;
         moreAfter?: string;
     };
-    declare const add: {
-        /* Add a single account record */
-        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
-    };
-    declare const count: {
-        /* Count multiple account records */
-        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
-    };
     declare const get: {
         /* Get a single account record */
         account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
@@ -26,11 +18,9 @@ exports[`module a basic model 1`] = `
         /* Get all current models */
         models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
-    declare const remove: {
-        /* Remove a single account record */
-        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
-        /* Remove multiple account records */
-        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    declare const count: {
+        /* Count multiple account records */
+        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
     };
     declare const set: {
         /* Set a single account record */
@@ -38,29 +28,39 @@ exports[`module a basic model 1`] = `
         /* Set multiple account records */
         accounts: DeepCallable<SetQuery[keyof SetQuery], Accounts>;
     };
+    declare const add: {
+        /* Add a single account record */
+        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+    };
+    declare const remove: {
+        /* Remove a single account record */
+        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+        /* Remove multiple account records */
+        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
@@ -70,37 +70,37 @@ exports[`module a basic model 1`] = `
 
 exports[`module with no modules 1`] = `
 "declare module "ronin" {
-    declare const add: {};
-    declare const count: {};
     declare const get: {
         /* Get all current models */
         models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
-    declare const remove: {};
+    declare const count: {};
     declare const set: {};
+    declare const add: {};
+    declare const remove: {};
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
@@ -126,18 +126,6 @@ exports[`module with multiple models 1`] = `
         moreBefore?: string;
         moreAfter?: string;
     };
-    declare const add: {
-        /* Add a single account record */
-        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
-        /* Add a single post record */
-        post: DeepCallable<AddQuery[keyof AddQuery], Post | null>;
-    };
-    declare const count: {
-        /* Count multiple account records */
-        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
-        /* Count multiple post records */
-        posts: DeepCallable<CountQuery[keyof CountQuery], number>;
-    };
     declare const get: {
         /* Get a single account record */
         account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
@@ -150,15 +138,11 @@ exports[`module with multiple models 1`] = `
         /* Get all current models */
         models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
-    declare const remove: {
-        /* Remove a single account record */
-        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
-        /* Remove multiple account records */
-        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
-        /* Remove a single post record */
-        post: DeepCallable<RemoveQuery[keyof RemoveQuery], Post | null>;
-        /* Remove multiple post records */
-        posts: DeepCallable<RemoveQuery[keyof RemoveQuery], Posts>;
+    declare const count: {
+        /* Count multiple account records */
+        accounts: DeepCallable<CountQuery[keyof CountQuery], number>;
+        /* Count multiple post records */
+        posts: DeepCallable<CountQuery[keyof CountQuery], number>;
     };
     declare const set: {
         /* Set a single account record */
@@ -170,29 +154,45 @@ exports[`module with multiple models 1`] = `
         /* Set multiple post records */
         posts: DeepCallable<SetQuery[keyof SetQuery], Posts>;
     };
+    declare const add: {
+        /* Add a single account record */
+        account: DeepCallable<AddQuery[keyof AddQuery], Account | null>;
+        /* Add a single post record */
+        post: DeepCallable<AddQuery[keyof AddQuery], Post | null>;
+    };
+    declare const remove: {
+        /* Remove a single account record */
+        account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
+        /* Remove multiple account records */
+        accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+        /* Remove a single post record */
+        post: DeepCallable<RemoveQuery[keyof RemoveQuery], Post | null>;
+        /* Remove multiple post records */
+        posts: DeepCallable<RemoveQuery[keyof RemoveQuery], Posts>;
+    };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
-        add: typeof add;
-        count: typeof count;
         get: typeof get;
-        remove: typeof remove;
+        count: typeof count;
         set: typeof set;
-        alter: typeof alter;
-        batch: typeof batch;
+        add: typeof add;
+        remove: typeof remove;
         create: typeof create;
+        alter: typeof alter;
         drop: typeof drop;
+        batch: typeof batch;
         sql: typeof sql;
         sqlBatch: typeof sqlBatch;
     };
