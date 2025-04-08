@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@ronin/compiler": "0.17.15",
+    "@ronin/compiler": "0.18.1",
     "@ronin/syntax": "0.2.37",
     "@types/bun": "1.2.4",
     "tsup": "8.4.0"

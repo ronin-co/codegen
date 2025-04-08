@@ -1,7 +1,6 @@
 import { NodeFlags, SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
 import { identifiers } from '@/src/constants/identifiers';
-import { QUERY_TYPE_NAMES } from '@/src/constants/schema';
 import { generateQueryTypeComment } from '@/src/generators/comment';
 import { convertToPascalCase } from '@/src/utils/slug';
 
@@ -14,6 +13,7 @@ import type {
 } from 'typescript';
 
 import type { Model } from '@/src/types/model';
+import { DDL_QUERY_TYPES, DML_QUERY_TYPES } from '@ronin/compiler';
 
 /**
  * Generate a module augmentation for the `ronin` module to override the
@@ -35,7 +35,7 @@ export const generateModule = (
     moduleBodyStatements.push(schemaTypeDec);
   }
 
-  const mappedQueryTypeVariableDeclarations = QUERY_TYPE_NAMES.map((queryType) => {
+  const mappedQueryTypeVariableDeclarations = DML_QUERY_TYPES.map((queryType) => {
     const declarationProperties = new Array<TypeElement>();
 
     for (const model of models) {
@@ -238,6 +238,7 @@ export const generateModule = (
    *  get: typeof get,
    *  remove: typeof remove,
    *  set: typeof set,
+   *  list: typeof list,
    *  alter: typeof alter,
    *  batch: typeof batch,
    *  create: typeof create,
@@ -248,7 +249,7 @@ export const generateModule = (
    * ```
    */
   const csfReturnTypeDec = factory.createTypeLiteralNode(
-    [...QUERY_TYPE_NAMES, 'alter', 'batch', 'create', 'drop', 'sql', 'sqlBatch'].map(
+    [...DML_QUERY_TYPES, ...DDL_QUERY_TYPES, 'batch', 'sql', 'sqlBatch'].map(
       (queryType) =>
         factory.createPropertySignature(
           undefined,
