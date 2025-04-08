@@ -11,13 +11,17 @@ import type { Identifier } from 'typescript';
  */
 export const identifiers = {
   compiler: {
-    queryType: {
+    ddlQueryType: {
+      list: factory.createIdentifier('ListQuery'),
+    },
+    dmlQueryType: {
       add: factory.createIdentifier('AddQuery'),
       count: factory.createIdentifier('CountQuery'),
       get: factory.createIdentifier('GetQuery'),
       remove: factory.createIdentifier('RemoveQuery'),
       set: factory.createIdentifier('SetQuery'),
     },
+    model: factory.createIdentifier('Model'),
     module: {
       root: factory.createIdentifier(JSON.stringify('@ronin/compiler')),
     },

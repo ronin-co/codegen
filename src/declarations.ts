@@ -5,16 +5,18 @@ import { createImportDeclaration } from '@/src/generators/import';
 
 /**
  * ```ts
- * import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+ * import type { AddQuery, CountQuery, GetQuery, ListQuery, Model, RemoveQuery, SetQuery } from "@ronin/compiler";
  * ```
  */
 export const importRoninQueryTypesType = createImportDeclaration({
   identifiers: [
-    { name: identifiers.compiler.queryType.add },
-    { name: identifiers.compiler.queryType.count },
-    { name: identifiers.compiler.queryType.get },
-    { name: identifiers.compiler.queryType.remove },
-    { name: identifiers.compiler.queryType.set },
+    { name: identifiers.compiler.dmlQueryType.add },
+    { name: identifiers.compiler.dmlQueryType.count },
+    { name: identifiers.compiler.dmlQueryType.get },
+    { name: identifiers.compiler.ddlQueryType.list },
+    { name: identifiers.compiler.model },
+    { name: identifiers.compiler.dmlQueryType.remove },
+    { name: identifiers.compiler.dmlQueryType.set },
   ],
   module: identifiers.compiler.module.root,
   type: true,

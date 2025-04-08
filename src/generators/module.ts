@@ -1,3 +1,4 @@
+import { DDL_QUERY_TYPES, DML_QUERY_TYPES } from '@ronin/compiler';
 import { NodeFlags, SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
 import { identifiers } from '@/src/constants/identifiers';
@@ -13,7 +14,6 @@ import type {
 } from 'typescript';
 
 import type { Model } from '@/src/types/model';
-import { DDL_QUERY_TYPES, DML_QUERY_TYPES } from '@ronin/compiler';
 
 /**
  * Generate a module augmentation for the `ronin` module to override the
@@ -54,12 +54,12 @@ export const generateModule = (
        */
       const queryTypeValue = factory.createIndexedAccessTypeNode(
         factory.createTypeReferenceNode(
-          identifiers.compiler.queryType[queryType],
+          identifiers.compiler.dmlQueryType[queryType],
           undefined,
         ),
         factory.createTypeOperatorNode(
           SyntaxKind.KeyOfKeyword,
-          factory.createTypeReferenceNode(identifiers.compiler.queryType[queryType]),
+          factory.createTypeReferenceNode(identifiers.compiler.dmlQueryType[queryType]),
         ),
       );
 
@@ -127,54 +127,6 @@ export const generateModule = (
       );
     }
 
-    // Make sure to always add `get.models()` to the `get` query type
-    // declaration, even if there are no models defined.
-    if (queryType === 'get') {
-      const model = {
-        pluralSlug: 'models',
-      } as Model;
-
-      /**
-       * ```ts
-       * GetQuery[keyof GetQuery]
-       * ```
-       */
-      const queryTypeValue = factory.createIndexedAccessTypeNode(
-        factory.createTypeReferenceNode(
-          identifiers.compiler.queryType[queryType],
-          undefined,
-        ),
-        factory.createTypeOperatorNode(
-          SyntaxKind.KeyOfKeyword,
-          factory.createTypeReferenceNode(identifiers.compiler.queryType[queryType]),
-        ),
-      );
-
-      /**
-       * ```ts
-       * models: DeepCallable<GetQuery[keyof GetQuery], Array<Models>>;
-       * ```
-       */
-      const property = factory.createPropertySignature(
-        undefined,
-        model.pluralSlug,
-        undefined,
-        factory.createTypeReferenceNode(identifiers.syntax.deepCallable, [
-          queryTypeValue,
-          factory.createTypeReferenceNode(convertToPascalCase(model.pluralSlug)),
-        ]),
-      );
-
-      declarationProperties.push(
-        addSyntheticLeadingComment(
-          property,
-          SyntaxKind.MultiLineCommentTrivia,
-          ' Get all current models ',
-          true,
-        ),
-      );
-    }
-
     return {
       properties: declarationProperties,
       queryType,
@@ -207,6 +159,58 @@ export const generateModule = (
 
     moduleBodyStatements.push(queryDeclaration);
   }
+
+  /**
+   * ```ts
+   * models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
+   * ```
+   */
+  const listModelsQueryPropertyDeclaration = addSyntheticLeadingComment(
+    factory.createPropertySignature(
+      undefined,
+      'models',
+      undefined,
+      factory.createTypeReferenceNode(identifiers.syntax.deepCallable, [
+        factory.createIndexedAccessTypeNode(
+          factory.createTypeReferenceNode(
+            identifiers.compiler.ddlQueryType.list,
+            undefined,
+          ),
+          factory.createTypeOperatorNode(
+            SyntaxKind.KeyOfKeyword,
+            factory.createTypeReferenceNode(identifiers.compiler.ddlQueryType.list),
+          ),
+        ),
+        factory.createTypeReferenceNode(identifiers.primitive.array, [
+          factory.createTypeReferenceNode(identifiers.compiler.model),
+        ]),
+      ]),
+    ),
+    SyntaxKind.MultiLineCommentTrivia,
+    ' List all model definitions ',
+    true,
+  );
+
+  /**
+   * ```ts
+   * declare const list: { ... };
+   * ```
+   */
+  const listModelsQueryDeclaration = factory.createVariableStatement(
+    [factory.createModifier(SyntaxKind.DeclareKeyword)],
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          'list',
+          undefined,
+          factory.createTypeLiteralNode([listModelsQueryPropertyDeclaration]),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+
+  moduleBodyStatements.push(listModelsQueryDeclaration);
 
   // Note: `csf` prefix stands for `createSyntaxFactory`.
 
