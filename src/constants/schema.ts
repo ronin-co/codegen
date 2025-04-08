@@ -5,6 +5,7 @@ import { identifiers } from '@/src/constants/identifiers';
 import type { TypeNode } from 'typescript';
 
 import type { ModelField } from '@/src/types/model';
+import type { DML_QUERY_TYPES } from '@ronin/compiler';
 
 /**
  * A list of all model field types & their TypeScript type mapping.
@@ -23,17 +24,12 @@ export const MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD = {
 } satisfies Record<ModelField['type'], TypeNode>;
 
 /**
- * An array of all possible query types as human readable strings.
- */
-export const QUERY_TYPE_NAMES = ['add', 'count', 'get', 'remove', 'set'] as const;
-
-/**
  * A simple object mapping all query types to their human readable string.
  */
-export const READABLE_QUERY_TYPE_NAMES = {
+export const READABLE_DML_QUERY_TYPES = {
   add: 'Add',
   count: 'Count',
   get: 'Get',
   remove: 'Remove',
   set: 'Set',
-} satisfies Record<(typeof QUERY_TYPE_NAMES)[number], string>;
+} satisfies Record<(typeof DML_QUERY_TYPES)[number], string>;
