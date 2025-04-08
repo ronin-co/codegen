@@ -47,6 +47,7 @@ declare module "ronin" {
         set: typeof set;
         add: typeof add;
         remove: typeof remove;
+        list: typeof list;
         create: typeof create;
         alter: typeof alter;
         drop: typeof drop;
@@ -60,6 +61,7 @@ declare module "ronin" {
         set: typeof set;
         add: typeof add;
         remove: typeof remove;
+        list: typeof list;
         create: typeof create;
         alter: typeof alter;
         drop: typeof drop;
@@ -90,6 +92,7 @@ declare module "ronin" {
         set: typeof set;
         add: typeof add;
         remove: typeof remove;
+        list: typeof list;
         create: typeof create;
         alter: typeof alter;
         drop: typeof drop;
@@ -103,6 +106,7 @@ declare module "ronin" {
         set: typeof set;
         add: typeof add;
         remove: typeof remove;
+        list: typeof list;
         create: typeof create;
         alter: typeof alter;
         drop: typeof drop;
