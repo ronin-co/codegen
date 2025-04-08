@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generate a basic model 1`] = `
-"import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+"import type { AddQuery, CountQuery, GetQuery, ListQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
 declare module "ronin" {
@@ -18,8 +18,6 @@ declare module "ronin" {
         account: DeepCallable<GetQuery[keyof GetQuery], Account | null>;
         /* Get multiple account records */
         accounts: DeepCallable<GetQuery[keyof GetQuery], Accounts>;
-        /* Get all current models */
-        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
     };
     declare const count: {
         /* Count multiple account records */
@@ -40,6 +38,10 @@ declare module "ronin" {
         account: DeepCallable<RemoveQuery[keyof RemoveQuery], Account | null>;
         /* Remove multiple account records */
         accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
+    };
+    declare const list: {
+        /* List all model definitions */
+        models: DeepCallable<ListQuery[keyof ListQuery], Models>;
     };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
         get: typeof get;
@@ -74,18 +76,19 @@ declare module "ronin" {
 `;
 
 exports[`generate with no models 1`] = `
-"import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
+"import type { AddQuery, CountQuery, GetQuery, ListQuery, RemoveQuery, SetQuery } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { QueryHandlerOptions } from "ronin/types";
 declare module "ronin" {
-    declare const get: {
-        /* Get all current models */
-        models: DeepCallable<GetQuery[keyof GetQuery], Models>;
-    };
+    declare const get: {};
     declare const count: {};
     declare const set: {};
     declare const add: {};
     declare const remove: {};
+    declare const list: {
+        /* List all model definitions */
+        models: DeepCallable<ListQuery[keyof ListQuery], Models>;
+    };
     declare const createSyntaxFactory: (options: QueryHandlerOptions | (() => QueryHandlerOptions)) => {
         get: typeof get;
         count: typeof count;

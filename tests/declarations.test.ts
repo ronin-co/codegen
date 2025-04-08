@@ -11,7 +11,7 @@ describe('declarations', () => {
   test('import the RONIN namespace type from `ronin`', () => {
     const output = printNodes([importRoninQueryTypesType]);
     expect(output).toStrictEqual(
-      `import type { AddQuery, CountQuery, GetQuery, RemoveQuery, SetQuery } from \"@ronin/compiler\";\n`,
+      `import type { AddQuery, CountQuery, GetQuery, ListQuery, RemoveQuery, SetQuery } from \"@ronin/compiler\";\n`,
     );
   });
 

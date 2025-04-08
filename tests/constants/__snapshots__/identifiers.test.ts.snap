@@ -3,11 +3,11 @@
 exports[`identifiers 1`] = `
 {
   "compiler": {
-    "module": {
-      "root": IdentifierObject {
+    "ddlQueryType": {
+      "list": IdentifierObject {
         "emitNode": undefined,
         "end": -1,
-        "escapedText": ""@ronin/compiler"",
+        "escapedText": "ListQuery",
         "flags": 16,
         "flowNode": undefined,
         "id": 0,
@@ -19,7 +19,7 @@ exports[`identifiers 1`] = `
         "transformFlags": 0,
       },
     },
-    "queryType": {
+    "dmlQueryType": {
       "add": IdentifierObject {
         "emitNode": undefined,
         "end": -1,
@@ -80,6 +80,22 @@ exports[`identifiers 1`] = `
         "emitNode": undefined,
         "end": -1,
         "escapedText": "SetQuery",
+        "flags": 16,
+        "flowNode": undefined,
+        "id": 0,
+        "jsDoc": undefined,
+        "kind": 80,
+        "parent": undefined,
+        "pos": -1,
+        "symbol": undefined,
+        "transformFlags": 0,
+      },
+    },
+    "module": {
+      "root": IdentifierObject {
+        "emitNode": undefined,
+        "end": -1,
+        "escapedText": ""@ronin/compiler"",
         "flags": 16,
         "flowNode": undefined,
         "id": 0,
