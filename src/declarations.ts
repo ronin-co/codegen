@@ -10,11 +10,12 @@ import { createImportDeclaration } from '@/src/generators/import';
  */
 export const importRoninQueryTypesType = createImportDeclaration({
   identifiers: [
-    { name: identifiers.compiler.queryType.add },
-    { name: identifiers.compiler.queryType.count },
-    { name: identifiers.compiler.queryType.get },
-    { name: identifiers.compiler.queryType.remove },
-    { name: identifiers.compiler.queryType.set },
+    { name: identifiers.compiler.dmlQueryType.add },
+    { name: identifiers.compiler.dmlQueryType.count },
+    { name: identifiers.compiler.dmlQueryType.get },
+    { name: identifiers.compiler.ddlQueryType.list },
+    { name: identifiers.compiler.dmlQueryType.remove },
+    { name: identifiers.compiler.dmlQueryType.set },
   ],
   module: identifiers.compiler.module.root,
   type: true,
