@@ -24,7 +24,7 @@ export const MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD = {
 } satisfies Record<ModelField['type'], TypeNode>;
 
 /**
- * A simple object mapping all query types to their human readable string.
+ * A simple object mapping all DML query types to their human readable string.
  */
 export const READABLE_DML_QUERY_TYPES = {
   add: 'Add',
