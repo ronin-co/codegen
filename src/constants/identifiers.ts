@@ -33,6 +33,7 @@ export const identifiers = {
   },
   ronin: {
     createSyntaxFactory: factory.createIdentifier('createSyntaxFactory'),
+    promiseTuple: factory.createIdentifier('PromiseTuple'),
     queryHandlerOptions: factory.createIdentifier('QueryHandlerOptions'),
     module: {
       root: factory.createIdentifier(JSON.stringify('ronin')),

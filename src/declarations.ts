@@ -49,11 +49,14 @@ export const importSyntaxUtiltypesType = createImportDeclaration({
 
 /**
  * ```ts
- * import type { QueryHandlerOptions } from "ronin/types";
+ * import type { PromiseTuple, QueryHandlerOptions } from "ronin/types";
  * ```
  */
 export const importQueryHandlerOptionsType = createImportDeclaration({
-  identifiers: [{ name: identifiers.ronin.queryHandlerOptions }],
+  identifiers: [
+    { name: identifiers.ronin.promiseTuple },
+    { name: identifiers.ronin.queryHandlerOptions },
+  ],
   module: identifiers.ronin.module.types,
   type: true,
 });
