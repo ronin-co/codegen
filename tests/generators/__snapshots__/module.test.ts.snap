@@ -36,6 +36,10 @@ exports[`module a basic model 1`] = `
         /* Remove multiple account records */
         accounts: DeepCallable<RemoveQuery[keyof RemoveQuery], Accounts>;
     };
+    declare const batch: <TQueries extends [
+        Promise,
+        ...Array<Promise>
+    ] | Array<Promise>>(operations: () => TQueries, queryOptions?: Record<string, unknown>) => Promise<PromiseTuple<TQueries>>;
     declare const list: {
         /* List all model definitions */
         models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
@@ -79,6 +83,10 @@ exports[`module with no modules 1`] = `
     declare const set: {};
     declare const add: {};
     declare const remove: {};
+    declare const batch: <TQueries extends [
+        Promise,
+        ...Array<Promise>
+    ] | Array<Promise>>(operations: () => TQueries, queryOptions?: Record<string, unknown>) => Promise<PromiseTuple<TQueries>>;
     declare const list: {
         /* List all model definitions */
         models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;
@@ -175,6 +183,10 @@ exports[`module with multiple models 1`] = `
         /* Remove multiple post records */
         posts: DeepCallable<RemoveQuery[keyof RemoveQuery], Posts>;
     };
+    declare const batch: <TQueries extends [
+        Promise,
+        ...Array<Promise>
+    ] | Array<Promise>>(operations: () => TQueries, queryOptions?: Record<string, unknown>) => Promise<PromiseTuple<TQueries>>;
     declare const list: {
         /* List all model definitions */
         models: DeepCallable<ListQuery[keyof ListQuery], Array<Model>>;

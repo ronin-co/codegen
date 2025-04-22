@@ -1,13 +1,14 @@
 import { DDL_QUERY_TYPES, DML_QUERY_TYPES } from '@ronin/compiler';
 import { NodeFlags, SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
-import { identifiers } from '@/src/constants/identifiers';
+import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
 import { generateQueryTypeComment } from '@/src/generators/comment';
 import { convertToPascalCase } from '@/src/utils/slug';
 
 import type {
   InterfaceDeclaration,
   ModuleDeclaration,
+  ParameterDeclaration,
   PropertySignature,
   Statement,
   TypeAliasDeclaration,
@@ -160,6 +161,97 @@ export const generateModule = (
 
     moduleBodyStatements.push(queryDeclaration);
   }
+
+  /**
+   * ```ts
+   * T extends [Promise, ...Array<Promise>] | Array<Promise>
+   * ```
+   */
+  const batchQueryTypeArguments = factory.createTypeParameterDeclaration(
+    undefined,
+    genericIdentifiers.queries,
+    factory.createUnionTypeNode([
+      factory.createTupleTypeNode([
+        factory.createTypeReferenceNode(identifiers.primitive.promise),
+        factory.createRestTypeNode(
+          factory.createTypeReferenceNode(identifiers.primitive.array, [
+            factory.createTypeReferenceNode(identifiers.primitive.promise),
+          ]),
+        ),
+      ]),
+
+      factory.createTypeReferenceNode(identifiers.primitive.array, [
+        factory.createTypeReferenceNode(identifiers.primitive.promise),
+      ]),
+    ]),
+  );
+
+  const batchQueryParametersDeclaration = new Array<ParameterDeclaration>();
+
+  /**
+   * ```ts
+   * operations: () => T
+   * ```
+   */
+  batchQueryParametersDeclaration.push(
+    factory.createParameterDeclaration(
+      undefined,
+      undefined,
+      'operations',
+      undefined,
+      factory.createFunctionTypeNode(
+        undefined,
+        [],
+        factory.createTypeReferenceNode(genericIdentifiers.queries),
+      ),
+    ),
+  );
+
+  /**
+   * ```ts
+   * queryOptions?: Record<string, unknown>
+   * ```
+   */
+  batchQueryParametersDeclaration.push(
+    factory.createParameterDeclaration(
+      undefined,
+      undefined,
+      'queryOptions',
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createTypeReferenceNode(identifiers.primitive.record, [
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+      ]),
+    ),
+  );
+
+  /**
+   * ```ts
+   * declare const batch: <...>(...) => Promise<PromiseTuple<T>>;
+   * ```
+   */
+  const batchQueryDeclaration = factory.createVariableStatement(
+    [factory.createModifier(SyntaxKind.DeclareKeyword)],
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          'batch',
+          undefined,
+          factory.createFunctionTypeNode(
+            [batchQueryTypeArguments],
+            batchQueryParametersDeclaration,
+            factory.createTypeReferenceNode(identifiers.primitive.promise, [
+              factory.createTypeReferenceNode(identifiers.ronin.promiseTuple, [
+                factory.createTypeReferenceNode(genericIdentifiers.queries),
+              ]),
+            ]),
+          ),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+  moduleBodyStatements.push(batchQueryDeclaration);
 
   /**
    * ```ts

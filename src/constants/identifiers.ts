@@ -30,6 +30,8 @@ export const identifiers = {
   primitive: {
     array: factory.createIdentifier('Array'),
     date: factory.createIdentifier('Date'),
+    promise: factory.createIdentifier('Promise'),
+    record: factory.createIdentifier('Record'),
   },
   ronin: {
     createSyntaxFactory: factory.createIdentifier('createSyntaxFactory'),
@@ -63,6 +65,7 @@ export const identifiers = {
  */
 export const genericIdentifiers = {
   key: factory.createIdentifier('TKey'),
+  queries: factory.createIdentifier('TQueries'),
   schema: factory.createIdentifier('TSchema'),
   using: factory.createIdentifier('TUsing'),
 } satisfies Record<string, Identifier>;
