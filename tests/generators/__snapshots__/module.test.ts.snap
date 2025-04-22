@@ -47,12 +47,12 @@ exports[`module a basic model 1`] = `
         add: typeof add;
         remove: typeof remove;
         list: typeof list;
-        create: typeof create;
-        alter: typeof alter;
-        drop: typeof drop;
-        batch: typeof batch;
-        sql: typeof sql;
-        sqlBatch: typeof sqlBatch;
+        create: typeof import("ronin").create;
+        alter: typeof import("ronin").alter;
+        drop: typeof import("ronin").drop;
+        batch: typeof import("ronin").batch;
+        sql: typeof import("ronin").sql;
+        sqlBatch: typeof import("ronin").sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         get: typeof get;
@@ -61,12 +61,12 @@ exports[`module a basic model 1`] = `
         add: typeof add;
         remove: typeof remove;
         list: typeof list;
-        create: typeof create;
-        alter: typeof alter;
-        drop: typeof drop;
-        batch: typeof batch;
-        sql: typeof sql;
-        sqlBatch: typeof sqlBatch;
+        create: typeof import("ronin").create;
+        alter: typeof import("ronin").alter;
+        drop: typeof import("ronin").drop;
+        batch: typeof import("ronin").batch;
+        sql: typeof import("ronin").sql;
+        sqlBatch: typeof import("ronin").sqlBatch;
     };
 }
 "
@@ -90,12 +90,12 @@ exports[`module with no modules 1`] = `
         add: typeof add;
         remove: typeof remove;
         list: typeof list;
-        create: typeof create;
-        alter: typeof alter;
-        drop: typeof drop;
-        batch: typeof batch;
-        sql: typeof sql;
-        sqlBatch: typeof sqlBatch;
+        create: typeof import("ronin").create;
+        alter: typeof import("ronin").alter;
+        drop: typeof import("ronin").drop;
+        batch: typeof import("ronin").batch;
+        sql: typeof import("ronin").sql;
+        sqlBatch: typeof import("ronin").sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         get: typeof get;
@@ -104,12 +104,12 @@ exports[`module with no modules 1`] = `
         add: typeof add;
         remove: typeof remove;
         list: typeof list;
-        create: typeof create;
-        alter: typeof alter;
-        drop: typeof drop;
-        batch: typeof batch;
-        sql: typeof sql;
-        sqlBatch: typeof sqlBatch;
+        create: typeof import("ronin").create;
+        alter: typeof import("ronin").alter;
+        drop: typeof import("ronin").drop;
+        batch: typeof import("ronin").batch;
+        sql: typeof import("ronin").sql;
+        sqlBatch: typeof import("ronin").sqlBatch;
     };
 }
 "
@@ -186,12 +186,12 @@ exports[`module with multiple models 1`] = `
         add: typeof add;
         remove: typeof remove;
         list: typeof list;
-        create: typeof create;
-        alter: typeof alter;
-        drop: typeof drop;
-        batch: typeof batch;
-        sql: typeof sql;
-        sqlBatch: typeof sqlBatch;
+        create: typeof import("ronin").create;
+        alter: typeof import("ronin").alter;
+        drop: typeof import("ronin").drop;
+        batch: typeof import("ronin").batch;
+        sql: typeof import("ronin").sql;
+        sqlBatch: typeof import("ronin").sqlBatch;
     };
     export default function (options: QueryHandlerOptions | (() => QueryHandlerOptions)): {
         get: typeof get;
@@ -200,12 +200,12 @@ exports[`module with multiple models 1`] = `
         add: typeof add;
         remove: typeof remove;
         list: typeof list;
-        create: typeof create;
-        alter: typeof alter;
-        drop: typeof drop;
-        batch: typeof batch;
-        sql: typeof sql;
-        sqlBatch: typeof sqlBatch;
+        create: typeof import("ronin").create;
+        alter: typeof import("ronin").alter;
+        drop: typeof import("ronin").drop;
+        batch: typeof import("ronin").batch;
+        sql: typeof import("ronin").sql;
+        sqlBatch: typeof import("ronin").sqlBatch;
     };
 }
 "

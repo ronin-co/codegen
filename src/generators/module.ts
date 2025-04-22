@@ -8,6 +8,7 @@ import { convertToPascalCase } from '@/src/utils/slug';
 import type {
   InterfaceDeclaration,
   ModuleDeclaration,
+  PropertySignature,
   Statement,
   TypeAliasDeclaration,
   TypeElement,
@@ -234,6 +235,8 @@ export const generateModule = (
     ]),
   );
 
+  const csfReturnTypePropertySignatures = new Array<PropertySignature>();
+
   /**
    * ```ts
    * (...) => {
@@ -243,26 +246,61 @@ export const generateModule = (
    *  remove: typeof remove,
    *  set: typeof set,
    *  list: typeof list,
-   *  alter: typeof alter,
-   *  batch: typeof batch,
-   *  create: typeof create,
-   *  drop: typeof drop,
-   *  sql: typeof sql,
-   *  sqlBatch: typeof sqlBatch,
    * }
    * ```
    */
-  const csfReturnTypeDec = factory.createTypeLiteralNode(
-    [...DML_QUERY_TYPES, ...DDL_QUERY_TYPES, 'batch', 'sql', 'sqlBatch'].map(
-      (queryType) =>
-        factory.createPropertySignature(
-          undefined,
-          factory.createIdentifier(queryType),
-          undefined,
-          factory.createTypeQueryNode(factory.createIdentifier(queryType)),
+  for (const queryType of [...DML_QUERY_TYPES, 'list']) {
+    csfReturnTypePropertySignatures.push(
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier(queryType),
+        undefined,
+        factory.createTypeQueryNode(factory.createIdentifier(queryType)),
+      ),
+    );
+  }
+
+  /**
+   * ```ts
+   * (...) => {
+   *  create: typeof import('ronin').create,
+   *  alter: typeof import('ronin').alter,
+   *  drop: typeof import('ronin').drop,
+   *  batch: typeof import('ronin').batch,
+   *  sql: typeof import('ronin').sql,
+   *  sqlBatch: typeof import('ronin').sqlBatch,
+   * }
+   * ```
+   */
+  for (const queryType of [
+    ...DDL_QUERY_TYPES.filter((v) => v !== 'list'),
+    'batch',
+    'sql',
+    'sqlBatch',
+  ]) {
+    csfReturnTypePropertySignatures.push(
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier(queryType),
+        undefined,
+        factory.createTypeQueryNode(
+          factory.createQualifiedName(
+            // Currently this is the only viable option I have found to implement a
+            // format of `import('ronin').xyz` node in the TSC API.
+            // But with this the TSC API marks these properties as not compatible,
+            // but pragmatically they work fine.
+            // @ts-expect-error
+            factory.createImportTypeNode(
+              factory.createTypeReferenceNode(identifiers.ronin.module.root),
+            ),
+            factory.createIdentifier(queryType),
+          ),
         ),
-    ),
-  );
+      ),
+    );
+  }
+
+  const csfReturnTypeDec = factory.createTypeLiteralNode(csfReturnTypePropertySignatures);
 
   moduleBodyStatements.push(
     /**
