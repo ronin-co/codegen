@@ -30,16 +30,14 @@ export const generate = (models: Array<Model>): string => {
     Object.values(model.fields).some((field) => field.type === 'blob'),
   );
 
-  const importTypes = new Array<Node>(
+  // Each node represents any kind of "block" like
+  // an import statement, interface, namespace, etc.
+  const nodes = new Array<Node>(
     importRoninQueryTypesType,
     ...(hasStoredObjectFields ? [importRoninStoredObjectType] : []),
     importSyntaxUtiltypesType,
     importQueryHandlerOptionsType,
   );
-
-  // Each node represents any kind of "block" like
-  // an import statement, interface, namespace, etc.
-  const nodes = new Array<Node>(...importTypes);
 
   // If there is any models that have a `link()` field, we need to add the
   // `ResolveSchemaType` type.
