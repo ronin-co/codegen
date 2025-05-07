@@ -24,20 +24,20 @@ import type { Model } from '@/src/types/model';
  * @returns A string of the complete `index.d.ts` file.
  */
 export const generate = (models: Array<Model>): string => {
-  // Each node represents any kind of "block" like
-  // an import statement, interface, namespace, etc.
-  const nodes = new Array<Node>(
-    importRoninQueryTypesType,
-    importSyntaxUtiltypesType,
-    importQueryHandlerOptionsType,
-  );
-
   // If there is any models that have a `blob()` field, we need to import the
   // `StoredObject` type from the `@ronin/compiler` package.
   const hasStoredObjectFields = models.some((model) =>
     Object.values(model.fields).some((field) => field.type === 'blob'),
   );
-  if (hasStoredObjectFields) nodes.push(importRoninStoredObjectType);
+
+  // Each node represents any kind of "block" like
+  // an import statement, interface, namespace, etc.
+  const nodes = new Array<Node>(
+    importRoninQueryTypesType,
+    ...(hasStoredObjectFields ? [importRoninStoredObjectType] : []),
+    importSyntaxUtiltypesType,
+    importQueryHandlerOptionsType,
+  );
 
   // If there is any models that have a `link()` field, we need to add the
   // `ResolveSchemaType` type.
