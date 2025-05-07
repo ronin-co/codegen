@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { model, string } from '@ronin/syntax/schema';
+import { blob, model, string } from '@ronin/syntax/schema';
 
 import { generate } from '@/src/index';
 
@@ -11,6 +11,7 @@ describe('generate', () => {
       fields: {
         name: string(),
         email: string({ required: true }),
+        image: blob(),
       },
     });
 

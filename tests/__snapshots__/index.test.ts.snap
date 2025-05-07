@@ -2,11 +2,13 @@
 
 exports[`generate a basic model 1`] = `
 "import type { AddQuery, CountQuery, GetQuery, ListQuery, Model, RemoveQuery, SetQuery } from "@ronin/compiler";
+import type { StoredObject } from "@ronin/compiler";
 import type { DeepCallable, ResultRecord } from "@ronin/syntax/queries";
 import type { PromiseTuple, QueryHandlerOptions } from "ronin/types";
 declare module "ronin" {
     export type Account = ResultRecord & {
         email: string;
+        image: StoredObject;
         name: string;
     };
     export type Accounts = Array<Account> & {
