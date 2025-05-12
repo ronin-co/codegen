@@ -17,7 +17,7 @@ import type { Node } from 'typescript';
 import type { Model } from '@/src/types/model';
 
 /**
- * Generates the complete `index.d.ts` file for a RONIN package.
+ * Generates the complete `index.d.ts` file for a list of RONIN models.
  *
  * @param models - A list of models to generate the the types for.
  *
@@ -59,4 +59,28 @@ export const generate = (models: Array<Model>): string => {
   nodes.push(moduleAugmentation);
 
   return printNodes(nodes);
+};
+
+/**
+ * Generates the complete `index.ts` Zod schema file for a list of RONIN models.
+ *
+ * @param models - A list of models to generate the the types for.
+ *
+ * @returns A string of the complete `index.ts` file.
+ */
+export const generateZodSchema = (models: Array<Model>): string => {
+  const lines = new Array<string | null>();
+  lines.push('import zod as z from "zod";\n');
+
+  for (const model of models) {
+    lines.push(`export const ${model.name} = z.object({`);
+
+    for (const [fieldSlug, field] of Object.entries(model.fields)) {
+      lines.push(`${fieldSlug}: z.${field.type}(),`);
+    }
+
+    lines.push('});\n');
+  }
+
+  return lines.join('\n');
 };
