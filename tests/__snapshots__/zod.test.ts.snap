@@ -3,9 +3,9 @@
 exports[`generate a basic model 1`] = `
 "import zod as z from "zod";
 
-export const undefined = z.object({
-name: z.string(),
-email: z.string(),
+export const Account = z.object({
+  name: z.string(),
+  email: z.string(),
 });
 "
 `;
@@ -13,10 +13,10 @@ email: z.string(),
 exports[`generate a basic model with blob field 1`] = `
 "import zod as z from "zod";
 
-export const undefined = z.object({
-name: z.string(),
-email: z.string(),
-image: z.blob(),
+export const Account = z.object({
+  name: z.string(),
+  email: z.string(),
+  image: z.blob(),
 });
 "
 `;

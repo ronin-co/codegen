@@ -15,6 +15,7 @@ import { printNodes } from '@/src/utils/print';
 import type { Node } from 'typescript';
 
 import type { Model } from '@/src/types/model';
+import { convertToPascalCase } from '@/src/utils/slug';
 
 /**
  * Generates the complete `index.d.ts` file for a list of RONIN models.
@@ -73,10 +74,12 @@ export const generateZodSchema = (models: Array<Model>): string => {
   lines.push('import zod as z from "zod";\n');
 
   for (const model of models) {
-    lines.push(`export const ${model.name} = z.object({`);
+    const modelName = convertToPascalCase(model.slug);
+
+    lines.push(`export const ${modelName} = z.object({`);
 
     for (const [fieldSlug, field] of Object.entries(model.fields)) {
-      lines.push(`${fieldSlug}: z.${field.type}(),`);
+      lines.push(`  ${fieldSlug}: z.${field.type}(),`);
     }
 
     lines.push('});\n');
