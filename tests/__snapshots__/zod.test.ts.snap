@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generate a basic model 1`] = `
-"import zod as z from "zod";
+"import { z } from "zod";
 
 export const Account = z.object({
   name: z.string(),
@@ -11,7 +11,7 @@ export const Account = z.object({
 `;
 
 exports[`generate a basic model with blob field 1`] = `
-"import zod as z from "zod";
+"import { z } from "zod";
 
 export const Account = z.object({
   name: z.string(),
@@ -22,6 +22,6 @@ export const Account = z.object({
 `;
 
 exports[`generate with no models 1`] = `
-"import zod as z from "zod";
+"import { z } from "zod";
 "
 `;

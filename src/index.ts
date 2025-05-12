@@ -71,7 +71,7 @@ export const generate = (models: Array<Model>): string => {
  */
 export const generateZodSchema = (models: Array<Model>): string => {
   const lines = new Array<string | null>();
-  lines.push('import zod as z from "zod";\n');
+  lines.push('import { z } from "zod";\n');
 
   for (const model of models) {
     const modelName = convertToPascalCase(model.slug);
