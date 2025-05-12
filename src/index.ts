@@ -98,7 +98,7 @@ export const generateZodSchema = (models: Array<Model>): string => {
 
       const methods = [zodType];
       if (field.required) methods.push('required');
-      const stringMethods = methods.map(method => `${method}()`).join('.');
+      const stringMethods = methods.map((method) => `${method}()`).join('.');
 
       lines.push(`  ${fieldSlug}: z.${stringMethods},`);
     }
