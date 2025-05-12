@@ -5,7 +5,7 @@ exports[`generate a basic model 1`] = `
 
 export const AccountSchema = z.object({
 	name: z.string().optional(),
-	email: z.string(),
+	email: z.string().email(),
 });
 "
 `;
@@ -15,7 +15,7 @@ exports[`generate a basic model with blob field 1`] = `
 
 export const AccountSchema = z.object({
 	name: z.string().optional(),
-	email: z.string(),
+	email: z.string().email(),
 	image: z.unknown().optional(),
 });
 "
@@ -26,7 +26,7 @@ exports[`generate with multiple models 1`] = `
 
 export const AccountSchema = z.object({
 	name: z.string().optional(),
-	email: z.string(),
+	email: z.string().email(),
 });
 export const PostSchema = z.object({
 	title: z.string(),
@@ -66,7 +66,7 @@ const JsonSchema: z.ZodType<Json> = z.lazy(() =>
 
 export const AccountSchema = z.object({
 	name: z.string().optional(),
-	email: z.string(),
+	email: z.string().email(),
 	settings: JsonSchema.optional(),
 });
 "

@@ -75,6 +75,9 @@ export const generateZodSchema = (models: Array<Model>): string => {
         }
       }
 
+      if (fieldSlug === 'email' && field.type === 'string')
+        chainedSchemaMethods.push('email()');
+
       if (field.required !== true) chainedSchemaMethods.push('optional()');
 
       const normalizedFieldSlug = fieldSlug.includes('.')
