@@ -16,6 +16,7 @@ import type { Node } from 'typescript';
 
 import type { Model } from '@/src/types/model';
 import { convertToPascalCase } from '@/src/utils/slug';
+import type { ModelField } from '@ronin/compiler';
 
 /**
  * Generates the complete `index.d.ts` file for a list of RONIN models.
@@ -62,6 +63,18 @@ export const generate = (models: Array<Model>): string => {
   return printNodes(nodes);
 };
 
+type ModelFieldType = Required<ModelField>['type'];
+
+const ZOD_FIELD_TYPES: Record<ModelFieldType, string> = {
+  string: 'string',
+  number: 'number',
+  boolean: 'boolean',
+  date: 'date',
+  json: 'any',
+  link: 'any',
+  blob: 'any',
+};
+
 /**
  * Generates the complete `index.ts` Zod schema file for a list of RONIN models.
  *
@@ -79,7 +92,15 @@ export const generateZodSchema = (models: Array<Model>): string => {
     lines.push(`export const ${modelName} = z.object({`);
 
     for (const [fieldSlug, field] of Object.entries(model.fields)) {
-      lines.push(`  ${fieldSlug}: z.${field.type}(),`);
+      const fieldType = field.type as ModelFieldType;
+      const zodType = ZOD_FIELD_TYPES[fieldType];
+      if (!zodType) continue;
+
+      const methods = [zodType];
+      if (field.required) methods.push('required');
+      const stringMethods = methods.map(method => `${method}()`).join('.');
+
+      lines.push(`  ${fieldSlug}: z.${stringMethods},`);
     }
 
     lines.push('});\n');

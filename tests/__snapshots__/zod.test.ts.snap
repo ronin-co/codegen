@@ -4,8 +4,8 @@ exports[`generate a basic model 1`] = `
 "import { z } from "zod";
 
 export const Account = z.object({
-  name: z.string(),
-  email: z.string(),
+  name: z.string().required(),
+  email: z.string().required(),
 });
 "
 `;
@@ -14,9 +14,9 @@ exports[`generate a basic model with blob field 1`] = `
 "import { z } from "zod";
 
 export const Account = z.object({
-  name: z.string(),
-  email: z.string(),
-  image: z.blob(),
+  name: z.string().required(),
+  email: z.string().required(),
+  image: z.any().required(),
 });
 "
 `;
