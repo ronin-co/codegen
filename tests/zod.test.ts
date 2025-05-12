@@ -37,6 +37,46 @@ describe('generate', () => {
     expect(output).toMatchSnapshot();
   });
 
+  test('with multiple models', () => {
+    const AccountModel = model({
+      slug: 'account',
+      pluralSlug: 'accounts',
+      fields: {
+        name: string(),
+        email: string({ required: true }),
+      },
+    });
+
+    const PostModel = model({
+      slug: 'post',
+      pluralSlug: 'posts',
+      fields: {
+        title: string({ required: true }),
+        describe: string(),
+      },
+    });
+
+    // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
+    // @ts-expect-error Codegen models types differ from the schema model types.
+    const output = generateZodSchema([AccountModel, PostModel]);
+    expect(output).toMatchSnapshot();
+  });
+
+  test('with dot notation keys', () => {
+    const AccountModel = model({
+      slug: 'account',
+      pluralSlug: 'accounts',
+      fields: {
+        'foo.bar': string(),
+      },
+    });
+
+    // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
+    // @ts-expect-error Codegen models types differ from the schema model types.
+    const output = generateZodSchema([AccountModel]);
+    expect(output).toMatchSnapshot();
+  });
+
   test('with no models', () => {
     const output = generateZodSchema([]);
     expect(output).toMatchSnapshot();

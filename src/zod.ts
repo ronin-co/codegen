@@ -6,15 +6,15 @@ import type { Model } from '@/src/types/model';
 
 type ModelFieldType = Required<ModelField>['type'];
 
-const ZOD_FIELD_TYPES: Record<ModelFieldType, string> = {
-  string: 'string',
-  number: 'number',
+const ZOD_FIELD_TYPES = {
+  blob: 'any',
   boolean: 'boolean',
   date: 'date',
   json: 'any',
   link: 'any',
-  blob: 'any',
-};
+  number: 'number',
+  string: 'string',
+} satisfies Record<ModelFieldType, string>;
 
 /**
  * Generates the complete `index.ts` Zod schema file for a list of RONIN models.
@@ -24,13 +24,15 @@ const ZOD_FIELD_TYPES: Record<ModelFieldType, string> = {
  * @returns A string of the complete `index.ts` file.
  */
 export const generateZodSchema = (models: Array<Model>): string => {
-  const lines = new Array<string | null>();
-  lines.push('import { z } from "zod";\n');
+  const lines = new Array<string | null>('import { z } from "zod";\n');
+
+  // If no models are provided, an empty export is needed to avoid errors.
+  if (models.length <= 0) lines.push('export {};');
 
   for (const model of models) {
     const modelName = convertToPascalCase(model.slug);
 
-    lines.push(`export const ${modelName} = z.object({`);
+    lines.push(`export const ${modelName}Schema = z.object({`);
 
     for (const [fieldSlug, field] of Object.entries(model.fields)) {
       const fieldType = field.type as ModelFieldType;
@@ -41,7 +43,11 @@ export const generateZodSchema = (models: Array<Model>): string => {
       if (field.required) methods.push('required');
       const stringMethods = methods.map((method) => `${method}()`).join('.');
 
-      lines.push(`  ${fieldSlug}: z.${stringMethods},`);
+      const normalizedFieldSlug = fieldSlug.includes('.')
+        ? JSON.stringify(fieldSlug)
+        : fieldSlug;
+
+      lines.push(`\t${normalizedFieldSlug}: z.${stringMethods},`);
     }
 
     lines.push('});\n');

@@ -3,9 +3,9 @@
 exports[`generate a basic model 1`] = `
 "import { z } from "zod";
 
-export const Account = z.object({
-  name: z.string().required(),
-  email: z.string().required(),
+export const AccountSchema = z.object({
+	name: z.string().required(),
+	email: z.string().required(),
 });
 "
 `;
@@ -13,15 +13,40 @@ export const Account = z.object({
 exports[`generate a basic model with blob field 1`] = `
 "import { z } from "zod";
 
-export const Account = z.object({
-  name: z.string().required(),
-  email: z.string().required(),
-  image: z.any().required(),
+export const AccountSchema = z.object({
+	name: z.string().required(),
+	email: z.string().required(),
+	image: z.any().required(),
+});
+"
+`;
+
+exports[`generate with multiple models 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	name: z.string().required(),
+	email: z.string().required(),
+});
+
+export const PostSchema = z.object({
+	title: z.string().required(),
+	describe: z.string().required(),
+});
+"
+`;
+
+exports[`generate with dot notation keys 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	"foo.bar": z.string().required(),
 });
 "
 `;
 
 exports[`generate with no models 1`] = `
 "import { z } from "zod";
-"
+
+export {};"
 `;
