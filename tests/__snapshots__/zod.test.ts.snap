@@ -1,0 +1,27 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate a basic model 1`] = `
+"import { z } from "zod";
+
+export const Account = z.object({
+  name: z.string().required(),
+  email: z.string().required(),
+});
+"
+`;
+
+exports[`generate a basic model with blob field 1`] = `
+"import { z } from "zod";
+
+export const Account = z.object({
+  name: z.string().required(),
+  email: z.string().required(),
+  image: z.any().required(),
+});
+"
+`;
+
+exports[`generate with no models 1`] = `
+"import { z } from "zod";
+"
+`;
