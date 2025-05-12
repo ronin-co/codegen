@@ -7,14 +7,30 @@ import type { Model } from '@/src/types/model';
 type ModelFieldType = Required<ModelField>['type'];
 
 const ZOD_FIELD_TYPES = {
-  blob: 'any',
+  blob: 'unknown',
   boolean: 'boolean',
-  date: 'date',
-  json: 'any',
-  link: 'any',
+  date: 'date', // TODO(@nurodev): Should this be `z.date()` or `z.string().datetime()`?
+  json: 'JsonSchema',
+  link: 'unknown',
   number: 'number',
   string: 'string',
 } satisfies Record<ModelFieldType, string>;
+
+const JSON_SCHEMA = `const JsonLiteralSchema = z.union([
+  z.boolean(),
+  z.null(),
+  z.number(),
+  z.string(),
+]);
+
+const ${ZOD_FIELD_TYPES.json} = z.lazy(() =>
+  z.union([
+    JsonLiteralSchema,
+    z.array(${ZOD_FIELD_TYPES.json}),
+    z.record(${ZOD_FIELD_TYPES.json})
+  ])
+);
+`;
 
 /**
  * Generates the complete `index.ts` Zod schema file for a list of RONIN models.
@@ -28,6 +44,14 @@ export const generateZodSchema = (models: Array<Model>): string => {
 
   // If no models are provided, an empty export is needed to avoid errors.
   if (models.length <= 0) lines.push('export {};');
+
+  // Only add the `JsonSchema` schema if at least one model has a `json` field.
+  const hasJsonField = models.some((model) =>
+    Object.values(model.fields).some((field) => field.type === 'json'),
+  );
+  if (hasJsonField) {
+    lines.push(JSON_SCHEMA);
+  }
 
   for (const model of models) {
     const modelName = convertToPascalCase(model.slug);

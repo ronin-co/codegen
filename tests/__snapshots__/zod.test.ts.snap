@@ -16,7 +16,7 @@ exports[`generate a basic model with blob field 1`] = `
 export const AccountSchema = z.object({
 	name: z.string().optional(),
 	email: z.string(),
-	image: z.any().optional(),
+	image: z.unknown().optional(),
 });
 "
 `;
@@ -40,6 +40,32 @@ exports[`generate with dot notation keys 1`] = `
 
 export const AccountSchema = z.object({
 	"foo.bar": z.string().optional(),
+});
+"
+`;
+
+exports[`generate with a JSON field 1`] = `
+"import { z } from "zod";
+
+const JsonLiteralSchema = z.union([
+  z.boolean(),
+  z.null(),
+  z.number(),
+  z.string(),
+]);
+
+const JsonSchema = z.lazy(() =>
+  z.union([
+    JsonLiteralSchema,
+    z.array(JsonSchema),
+    z.record(JsonSchema)
+  ])
+);
+
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	email: z.string(),
+	settings: z.JsonSchema().optional(),
 });
 "
 `;
