@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { blob, model, string } from '@ronin/syntax/schema';
 
-import { generateZodSchema } from '@/src/index';
+import { generateZodSchema } from '@/src/zod';
 
 describe('generate', () => {
   test('a basic model', () => {
