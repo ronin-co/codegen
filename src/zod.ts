@@ -32,25 +32,26 @@ export const generateZodSchema = (models: Array<Model>): string => {
   for (const model of models) {
     const modelName = convertToPascalCase(model.slug);
 
-    lines.push(`export const ${modelName}Schema = z.object({`);
-
+    const entries = new Array<string>();
     for (const [fieldSlug, field] of Object.entries(model.fields)) {
       const fieldType = field.type as ModelFieldType;
       const zodType = ZOD_FIELD_TYPES[fieldType];
       if (!zodType) continue;
 
       const methods = [zodType];
-      if (field.required) methods.push('required');
+      if (field.required !== true) methods.push('optional');
       const stringMethods = methods.map((method) => `${method}()`).join('.');
 
       const normalizedFieldSlug = fieldSlug.includes('.')
         ? JSON.stringify(fieldSlug)
         : fieldSlug;
 
-      lines.push(`\t${normalizedFieldSlug}: z.${stringMethods},`);
+      entries.push(`\t${normalizedFieldSlug}: z.${stringMethods},`);
     }
 
-    lines.push('});\n');
+    lines.push(
+      `export const ${modelName}Schema = z.object({\n${entries.join('\n')}\n});`,
+    );
   }
 
   return lines.join('\n');
