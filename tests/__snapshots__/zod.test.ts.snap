@@ -6,7 +6,8 @@ exports[`generate a basic model 1`] = `
 export const AccountSchema = z.object({
 	name: z.string().optional(),
 	email: z.string(),
-});"
+});
+"
 `;
 
 exports[`generate a basic model with blob field 1`] = `
@@ -16,7 +17,8 @@ export const AccountSchema = z.object({
 	name: z.string().optional(),
 	email: z.string(),
 	image: z.any().optional(),
-});"
+});
+"
 `;
 
 exports[`generate with multiple models 1`] = `
@@ -29,7 +31,8 @@ export const AccountSchema = z.object({
 export const PostSchema = z.object({
 	title: z.string(),
 	describe: z.string().optional(),
-});"
+});
+"
 `;
 
 exports[`generate with dot notation keys 1`] = `
@@ -37,11 +40,13 @@ exports[`generate with dot notation keys 1`] = `
 
 export const AccountSchema = z.object({
 	"foo.bar": z.string().optional(),
-});"
+});
+"
 `;
 
 exports[`generate with no models 1`] = `
 "import { z } from "zod";
 
-export {};"
+export {};
+"
 `;

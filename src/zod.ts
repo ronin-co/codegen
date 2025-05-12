@@ -54,5 +54,5 @@ export const generateZodSchema = (models: Array<Model>): string => {
     );
   }
 
-  return lines.join('\n');
+  return `${lines.join('\n')}\n`;
 };
