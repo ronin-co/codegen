@@ -23,7 +23,9 @@ const JSON_SCHEMA = `const JsonLiteralSchema = z.union([
   z.string(),
 ]);
 
-const ${ZOD_FIELD_TYPES.json} = z.lazy(() =>
+type Json = z.infer<typeof JsonLiteralSchema> | { [key: string]: Json } | Array<Json>;
+
+const ${ZOD_FIELD_TYPES.json}: z.ZodType<Json> = z.lazy(() =>
   z.union([
     JsonLiteralSchema,
     z.array(${ZOD_FIELD_TYPES.json}),
@@ -58,19 +60,28 @@ export const generateZodSchema = (models: Array<Model>): string => {
 
     const entries = new Array<string>();
     for (const [fieldSlug, field] of Object.entries(model.fields)) {
-      const fieldType = field.type as ModelFieldType;
-      const zodType = ZOD_FIELD_TYPES[fieldType];
-      if (!zodType) continue;
+      const chainedSchemaMethods = new Array<string>();
+      switch (field.type) {
+        case 'json': {
+          chainedSchemaMethods.push(ZOD_FIELD_TYPES.json);
+          break;
+        }
+        default: {
+          const fieldType = field.type as ModelFieldType;
+          const zodType = ZOD_FIELD_TYPES[fieldType];
+          if (!zodType) continue;
+          chainedSchemaMethods.push(`z.${zodType}()`);
+          break;
+        }
+      }
 
-      const methods = [zodType];
-      if (field.required !== true) methods.push('optional');
-      const stringMethods = methods.map((method) => `${method}()`).join('.');
+      if (field.required !== true) chainedSchemaMethods.push('optional()');
 
       const normalizedFieldSlug = fieldSlug.includes('.')
         ? JSON.stringify(fieldSlug)
         : fieldSlug;
 
-      entries.push(`\t${normalizedFieldSlug}: z.${stringMethods},`);
+      entries.push(`\t${normalizedFieldSlug}: ${chainedSchemaMethods.join('.')},`);
     }
 
     lines.push(

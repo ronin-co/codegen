@@ -54,7 +54,9 @@ const JsonLiteralSchema = z.union([
   z.string(),
 ]);
 
-const JsonSchema = z.lazy(() =>
+type Json = z.infer<typeof JsonLiteralSchema> | { [key: string]: Json } | Array<Json>;
+
+const JsonSchema: z.ZodType<Json> = z.lazy(() =>
   z.union([
     JsonLiteralSchema,
     z.array(JsonSchema),
@@ -65,7 +67,7 @@ const JsonSchema = z.lazy(() =>
 export const AccountSchema = z.object({
 	name: z.string().optional(),
 	email: z.string(),
-	settings: z.JsonSchema().optional(),
+	settings: JsonSchema.optional(),
 });
 "
 `;
