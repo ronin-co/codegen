@@ -3,9 +3,9 @@
 exports[`generate a basic model 1`] = `
 "import { z } from "zod";
 
-export const Account = z.object({
-  name: z.string().required(),
-  email: z.string().required(),
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	email: z.string().email(),
 });
 "
 `;
@@ -13,15 +13,68 @@ export const Account = z.object({
 exports[`generate a basic model with blob field 1`] = `
 "import { z } from "zod";
 
-export const Account = z.object({
-  name: z.string().required(),
-  email: z.string().required(),
-  image: z.any().required(),
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	email: z.string().email(),
+	image: z.unknown().optional(),
+});
+"
+`;
+
+exports[`generate with multiple models 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	email: z.string().email(),
+});
+export const PostSchema = z.object({
+	title: z.string(),
+	describe: z.string().optional(),
+});
+"
+`;
+
+exports[`generate with dot notation keys 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	"foo.bar": z.string().optional(),
+});
+"
+`;
+
+exports[`generate with a JSON field 1`] = `
+"import { z } from "zod";
+
+const JsonLiteralSchema = z.union([
+  z.boolean(),
+  z.null(),
+  z.number(),
+  z.string(),
+]);
+
+type Json = z.infer<typeof JsonLiteralSchema> | { [key: string]: Json } | Array<Json>;
+
+const JsonSchema: z.ZodType<Json> = z.lazy(() =>
+  z.union([
+    JsonLiteralSchema,
+    z.array(JsonSchema),
+    z.record(JsonSchema)
+  ])
+);
+
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	email: z.string().email(),
+	settings: JsonSchema.optional(),
 });
 "
 `;
 
 exports[`generate with no models 1`] = `
 "import { z } from "zod";
+
+export {};
 "
 `;

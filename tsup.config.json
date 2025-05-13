@@ -6,6 +6,7 @@
     },
     "format": "esm",
     "entry": {
-      "index": "./src/index.ts"
+      "index": "./src/index.ts",
+      "zod": "./src/zod.ts"
     }
 }
