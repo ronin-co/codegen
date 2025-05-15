@@ -72,6 +72,17 @@ export const AccountSchema = z.object({
 "
 `;
 
+exports[`generate with a default value 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	email: z.string().email(),
+	role: z.string(),
+});
+"
+`;
+
 exports[`generate with no models 1`] = `
 "import { z } from "zod";
 

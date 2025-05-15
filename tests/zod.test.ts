@@ -94,6 +94,23 @@ describe('generate', () => {
     expect(output).toMatchSnapshot();
   });
 
+  test('with a default value', () => {
+    const AccountModel = model({
+      slug: 'account',
+      pluralSlug: 'accounts',
+      fields: {
+        name: string(),
+        email: string({ required: true }),
+        role: string({ defaultValue: 'user' }),
+      },
+    });
+
+    // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
+    // @ts-expect-error Codegen models types differ from the schema model types.
+    const output = generateZodSchema([AccountModel]);
+    expect(output).toMatchSnapshot();
+  });
+
   test('with no models', () => {
     const output = generateZodSchema([]);
     expect(output).toMatchSnapshot();
