@@ -39,7 +39,9 @@ exports[`generate with dot notation keys 1`] = `
 "import { z } from "zod";
 
 export const AccountSchema = z.object({
-	"foo.bar": z.string().optional(),
+	foo: z.object({
+		bar: z.string().optional(),
+	});
 });
 "
 `;
@@ -79,6 +81,19 @@ export const AccountSchema = z.object({
 	name: z.string().optional(),
 	email: z.string().email(),
 	role: z.string(),
+});
+"
+`;
+
+exports[`generate with a nested field 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	name: z.string().optional(),
+	nested: z.object({
+		foo: z.string(),
+		bar: z.number().optional(),
+	});
 });
 "
 `;

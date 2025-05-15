@@ -58,7 +58,7 @@ export const generateZodSchema = (models: Array<Model>): string => {
   for (const model of models) {
     const modelName = convertToPascalCase(model.slug);
 
-    const entries = new Array<string>();
+    const entries = new Map<string, string | Map<string, string>>();
     for (const [fieldSlug, field] of Object.entries(model.fields)) {
       const chainedSchemaMethods = new Array<string>();
       switch (field.type) {
@@ -81,15 +81,31 @@ export const generateZodSchema = (models: Array<Model>): string => {
       if (field.required !== true && !('defaultValue' in field))
         chainedSchemaMethods.push('optional()');
 
-      const normalizedFieldSlug = fieldSlug.includes('.')
-        ? JSON.stringify(fieldSlug)
-        : fieldSlug;
+      if (!fieldSlug.includes('.')) {
+        entries.set(fieldSlug, chainedSchemaMethods.join('.'));
+        continue;
+      }
 
-      entries.push(`\t${normalizedFieldSlug}: ${chainedSchemaMethods.join('.')},`);
+      const [nestedFieldKey, nestedFieldSubKey] = fieldSlug.split('.');
+      const nestedFieldMap = entries.get(nestedFieldKey) ?? new Map<string, string>();
+      if (typeof nestedFieldMap !== 'string') {
+        nestedFieldMap.set(nestedFieldSubKey, chainedSchemaMethods.join('.'));
+      }
+
+      entries.set(nestedFieldKey, nestedFieldMap);
     }
 
     lines.push(
-      `export const ${modelName}Schema = z.object({\n${entries.join('\n')}\n});`,
+      `export const ${modelName}Schema = z.object({\n${Array.from(entries)
+        .map(([key, value]) => {
+          if (typeof value === 'string') return `\t${key}: ${value},`;
+
+          const zodObjectBody = Array.from(value.entries())
+            .map(([nestedKey, nestedValue]) => `\t\t${nestedKey}: ${nestedValue},`)
+            .join('\n');
+          return `\t${key}: z.object({\n${zodObjectBody}\n\t});`;
+        })
+        .join('\n')}\n});`,
     );
   }
 
