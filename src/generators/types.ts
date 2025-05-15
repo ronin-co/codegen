@@ -122,9 +122,13 @@ export const generateTypes = (
         if (field.required === false && field.type === 'link' && field.kind !== 'many')
           propertyUnionTypes.push(factory.createLiteralTypeNode(factory.createNull()));
 
+        const normalizedSlug = field.slug.includes('.')
+          ? JSON.stringify(field.slug)
+          : field.slug;
+
         return factory.createPropertySignature(
           undefined,
-          field.slug,
+          normalizedSlug,
           undefined,
           factory.createUnionTypeNode(propertyUnionTypes),
         );

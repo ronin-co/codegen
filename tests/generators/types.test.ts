@@ -169,4 +169,27 @@ describe('types', () => {
 
     expect(typesResultStr).toMatchSnapshot();
   });
+
+  test('a model with nested fields', () => {
+    const AccountModel = model({
+      slug: 'account',
+      pluralSlug: 'accounts',
+      fields: {
+        'nested.foo': string(),
+        'nested.bar': number(),
+      },
+      // @ts-expect-error This property is not native to RONIN models.
+      summary: 'A user account.',
+    });
+
+    // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
+    // @ts-expect-error Codegen models types differ from the schema model types.
+    const typesResult = generateTypes([AccountModel], AccountModel);
+
+    expect(typesResult).toHaveLength(2);
+
+    const typesResultStr = printNodes(typesResult);
+
+    expect(typesResultStr).toMatchSnapshot();
+  });
 });
