@@ -103,7 +103,7 @@ export const generateZodSchema = (models: Array<Model>): string => {
           const zodObjectBody = Array.from(value.entries())
             .map(([nestedKey, nestedValue]) => `\t\t${nestedKey}: ${nestedValue},`)
             .join('\n');
-          return `\t${key}: z.object({\n${zodObjectBody}\n\t});`;
+          return `\t${key}: z.object({\n${zodObjectBody}\n\t}),`;
         })
         .join('\n')}\n});`,
     );
