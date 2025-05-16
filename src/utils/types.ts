@@ -116,17 +116,9 @@ export const remapNestedFields = (
       continue;
     }
 
-    if (Array.isArray(parentField)) {
-      parentField.push(nestedField);
-      continue;
-    }
+    if (!Array.isArray(parentField)) continue;
 
-    if (parentField) {
-      remappedFields.set(parentSlug, [parentField, field]);
-      continue;
-    }
-
-    remappedFields.set(parentSlug, [nestedField]);
+    parentField.push(nestedField);
   }
 
   return Array.from(remappedFields.entries());
