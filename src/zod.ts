@@ -81,6 +81,9 @@ export const generateZodSchema = (models: Array<Model>): string => {
       if (field.required !== true && !('defaultValue' in field))
         chainedSchemaMethods.push('optional()');
 
+      if (fieldSlug === 'id' && field.type === 'string')
+        chainedSchemaMethods.push('readonly()');
+
       if (!fieldSlug.includes('.')) {
         entries.set(fieldSlug, chainedSchemaMethods.join('.'));
         continue;

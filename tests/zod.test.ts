@@ -128,6 +128,23 @@ describe('generate', () => {
     expect(output).toMatchSnapshot();
   });
 
+  test('with `id` field being read-only', () => {
+    const AccountModel = model({
+      slug: 'account',
+      pluralSlug: 'accounts',
+      fields: {
+        // @ts-expect-error `id` is a reserved field.
+        id: string(),
+        name: string(),
+      },
+    });
+
+    // TODO(@nurodev): Refactor the `Model` type to be more based on current schema models.
+    // @ts-expect-error Codegen models types differ from the schema model types.
+    const output = generateZodSchema([AccountModel]);
+    expect(output).toMatchSnapshot();
+  });
+
   test('with no models', () => {
     const output = generateZodSchema([]);
     expect(output).toMatchSnapshot();
