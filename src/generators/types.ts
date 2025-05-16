@@ -1,13 +1,11 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
 import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
-import { MODEL_TYPE_TO_SYNTAX_KIND_KEYWORD } from '@/src/constants/schema';
 import { convertToPascalCase } from '@/src/utils/slug';
 
 import type {
   InterfaceDeclaration,
   TypeAliasDeclaration,
-  TypeNode,
   TypeParameterDeclaration,
 } from 'typescript';
 
@@ -95,6 +93,39 @@ export const generateTypes = (
       hasLinkFields ? [factory.createTypeReferenceNode(genericIdentifiers.using)] : [],
     );
 
+    // Nested fields require their dot-notation field slugs to be remapped to a nested
+    // object structure.
+    const normalizedFieldsMap = new Map<string, ModelField | Array<ModelField>>();
+    for (const field of fields) {
+      if (!field.slug.includes('.')) {
+        normalizedFieldsMap.set(field.slug, field);
+        continue;
+      }
+
+      const [parentSlug, childSlug] = field.slug.split('.');
+      const nestedField = Object.assign({}, field, {
+        slug: childSlug,
+      });
+
+      const parentField = normalizedFieldsMap.get(parentSlug);
+      if (!parentField) {
+        normalizedFieldsMap.set(parentSlug, [nestedField]);
+        continue;
+      }
+
+      if (Array.isArray(parentField)) {
+        parentField.push(nestedField);
+        continue;
+      }
+
+      if (parentField) {
+        normalizedFieldsMap.set(parentSlug, [parentField, field]);
+        continue;
+      }
+
+      normalizedFieldsMap.set(parentSlug, [nestedField]);
+    }
+
     /**
      * ```ts
      * export type SchemaSlug<TUsing extends Array<...> | 'all' = []> = ResultRecord & {
@@ -112,17 +143,37 @@ export const generateTypes = (
           undefined,
         ),
         factory.createTypeLiteralNode(
-          fields
-            .sort((a, b) => a.slug.localeCompare(b.slug))
-            .map((field) =>
-              factory.createPropertySignature(
+          Array.from(normalizedFieldsMap.entries())
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([fieldSlug, field]) => {
+              if (Array.isArray(field)) {
+                const sortedFields = field.sort((a, b) => a.slug.localeCompare(b.slug));
+                return factory.createPropertySignature(
+                  undefined,
+                  fieldSlug,
+                  undefined,
+                  factory.createTypeLiteralNode(
+                    sortedFields.map((nestedField) =>
+                      factory.createPropertySignature(
+                        undefined,
+                        nestedField.slug,
+                        undefined,
+                        factory.createUnionTypeNode(
+                          mapRoninFieldToTypeNode(nestedField, models),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return factory.createPropertySignature(
                 undefined,
-                field.slug,
+                fieldSlug,
                 undefined,
                 factory.createUnionTypeNode(mapRoninFieldToTypeNode(field, models)),
-              ),
-            )
-            .filter(Boolean),
+              );
+            }),
         ),
       ]),
     );
