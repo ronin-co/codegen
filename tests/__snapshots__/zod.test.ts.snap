@@ -104,3 +104,13 @@ exports[`generate with no models 1`] = `
 export {};
 "
 `;
+
+exports[`generate with \`id\` field being read-only 1`] = `
+"import { z } from "zod";
+
+export const AccountSchema = z.object({
+	id: z.string().optional().readonly(),
+	name: z.string().optional(),
+});
+"
+`;
