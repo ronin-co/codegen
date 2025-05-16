@@ -81,3 +81,53 @@ export const mapRoninFieldToTypeNode = (
 
   return propertyUnionTypes;
 };
+
+/**
+ * Remap nested fields to a more usable format.
+ *
+ * Currently, nested fields for a RONIN model are stored using a dot-notation
+ * slug, such as `foo.bar`. However, these are resolved as a nested object.
+ * As such, we need to remap the fields to a more usable format.
+ *
+ * @param fields - The list of fields to remap.
+ *
+ * @returns An array of entries where the key is the field slug and the value is
+ * either the field itself or an array of (nested) fields.
+ */
+export const remapNestedFields = (
+  fields: Array<ModelField>,
+): Array<[string, ModelField | Array<ModelField>]> => {
+  const remappedFields = new Map<string, ModelField | Array<ModelField>>();
+
+  for (const field of fields) {
+    if (!field.slug.includes('.')) {
+      remappedFields.set(field.slug, field);
+      continue;
+    }
+
+    const [parentSlug, childSlug] = field.slug.split('.');
+    const nestedField = Object.assign({}, field, {
+      slug: childSlug,
+    });
+
+    const parentField = remappedFields.get(parentSlug);
+    if (!parentField) {
+      remappedFields.set(parentSlug, [nestedField]);
+      continue;
+    }
+
+    if (Array.isArray(parentField)) {
+      parentField.push(nestedField);
+      continue;
+    }
+
+    if (parentField) {
+      remappedFields.set(parentSlug, [parentField, field]);
+      continue;
+    }
+
+    remappedFields.set(parentSlug, [nestedField]);
+  }
+
+  return Array.from(remappedFields.entries());
+};

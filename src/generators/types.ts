@@ -2,6 +2,7 @@ import { SyntaxKind, addSyntheticLeadingComment, factory } from 'typescript';
 
 import { genericIdentifiers, identifiers } from '@/src/constants/identifiers';
 import { convertToPascalCase } from '@/src/utils/slug';
+import { mapRoninFieldToTypeNode, remapNestedFields } from '@/src/utils/types';
 
 import type {
   InterfaceDeclaration,
@@ -10,7 +11,6 @@ import type {
 } from 'typescript';
 
 import type { Model, ModelField } from '@/src/types/model';
-import { mapRoninFieldToTypeNode } from '@/src/utils/types';
 
 const DEFAULT_FIELD_SLUGS = [
   'id',
@@ -93,39 +93,6 @@ export const generateTypes = (
       hasLinkFields ? [factory.createTypeReferenceNode(genericIdentifiers.using)] : [],
     );
 
-    // Nested fields require their dot-notation field slugs to be remapped to a nested
-    // object structure.
-    const normalizedFieldsMap = new Map<string, ModelField | Array<ModelField>>();
-    for (const field of fields) {
-      if (!field.slug.includes('.')) {
-        normalizedFieldsMap.set(field.slug, field);
-        continue;
-      }
-
-      const [parentSlug, childSlug] = field.slug.split('.');
-      const nestedField = Object.assign({}, field, {
-        slug: childSlug,
-      });
-
-      const parentField = normalizedFieldsMap.get(parentSlug);
-      if (!parentField) {
-        normalizedFieldsMap.set(parentSlug, [nestedField]);
-        continue;
-      }
-
-      if (Array.isArray(parentField)) {
-        parentField.push(nestedField);
-        continue;
-      }
-
-      if (parentField) {
-        normalizedFieldsMap.set(parentSlug, [parentField, field]);
-        continue;
-      }
-
-      normalizedFieldsMap.set(parentSlug, [nestedField]);
-    }
-
     /**
      * ```ts
      * export type SchemaSlug<TUsing extends Array<...> | 'all' = []> = ResultRecord & {
@@ -143,7 +110,7 @@ export const generateTypes = (
           undefined,
         ),
         factory.createTypeLiteralNode(
-          Array.from(normalizedFieldsMap.entries())
+          remapNestedFields(fields)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([fieldSlug, field]) => {
               if (Array.isArray(field)) {
