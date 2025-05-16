@@ -41,7 +41,7 @@ exports[`generate with dot notation keys 1`] = `
 export const AccountSchema = z.object({
 	foo: z.object({
 		bar: z.string().optional(),
-	});
+	}),
 });
 "
 `;
@@ -93,7 +93,7 @@ export const AccountSchema = z.object({
 	nested: z.object({
 		foo: z.string(),
 		bar: z.number().optional(),
-	});
+	}),
 });
 "
 `;
