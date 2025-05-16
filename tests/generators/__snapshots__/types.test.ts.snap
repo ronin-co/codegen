@@ -108,8 +108,11 @@ exports[`types a model with nested fields 1`] = `
  * A user account.
  */
 export type Account = ResultRecord & {
-    "nested.bar": number;
-    "nested.foo": string;
+    name: string;
+    nested: {
+        bar: number;
+        foo: string;
+    };
 };
 /**
  * A user account.

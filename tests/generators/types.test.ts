@@ -175,6 +175,7 @@ describe('types', () => {
       slug: 'account',
       pluralSlug: 'accounts',
       fields: {
+        name: string(),
         'nested.foo': string(),
         'nested.bar': number(),
       },
